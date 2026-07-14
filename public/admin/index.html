@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager — Pretty Damn Sweet</title>
+
+    <!-- Fonts (match the live site) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Absolute path so Decap finds config even when visiting /admin (no trailing slash) -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+
+    <!-- Dark theme for the admin UI -->
+    <link href="/admin/admin.css" rel="stylesheet" />
+
     <style>
       #cms-loading {
         position: fixed;
@@ -32,6 +45,7 @@
         font-size: 12px;
       }
     </style>
+
     <script>
       // Apply a pending OAuth result BEFORE Decap boots.
       // The /api/callback popup writes this when window.opener is null (GitHub COOP).
@@ -61,7 +75,9 @@
       />
       <small>Loading content manager…</small>
     </div>
+
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
     <script>
       (function () {
         var loadingEl = document.getElementById("cms-loading");
@@ -97,6 +113,234 @@
             }
           } catch (e) {}
         }, 400);
+      })();
+    </script>
+
+    <!-- Preview pane: mirror the live work-detail page -->
+    <script>
+      (function () {
+        if (!window.CMS || !window.h) return;
+        var h = window.h;
+
+        CMS.registerPreviewStyle(
+          "https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        );
+        CMS.registerPreviewStyle("/admin/preview.css");
+
+        function toEmbed(raw) {
+          if (!raw) return null;
+          var u = String(raw).trim();
+          var vimeo = u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+          if (vimeo) return "https://player.vimeo.com/video/" + vimeo[1];
+          var yt = u.match(
+            /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/
+          );
+          if (yt) return "https://www.youtube.com/embed/" + yt[1];
+          return null;
+        }
+
+        function video(url, key) {
+          if (!url) return null;
+          var embed = toEmbed(url);
+          if (embed) {
+            return h(
+              "div",
+              { className: "pv-embed", key: key },
+              h("iframe", {
+                src: embed,
+                frameBorder: "0",
+                allow: "autoplay; fullscreen; picture-in-picture",
+                allowFullScreen: true,
+              })
+            );
+          }
+          return h(
+            "div",
+            { className: "pv-embed pv-embed--empty", key: key },
+            "Video: " + url
+          );
+        }
+
+        function section(label, children) {
+          return h(
+            "section",
+            { className: "pv-section" },
+            h("p", { className: "pv-eyebrow" }, label),
+            children
+          );
+        }
+
+        function gallery(list, assetFn, alt) {
+          if (!list || !list.length) return null;
+          return h(
+            "div",
+            { className: "pv-grid" },
+            list.map(function (src, i) {
+              return h(
+                "figure",
+                { key: i },
+                h("img", { src: assetFn(src), alt: alt + " " + (i + 1) })
+              );
+            })
+          );
+        }
+
+        var ProjectPreview = function (props) {
+          var entry = props.entry;
+          var data = entry.get("data");
+          var widgetFor = props.widgetFor;
+          var getAsset = props.getAsset;
+
+          function val(key) {
+            var v = data.get(key);
+            return v == null ? "" : v;
+          }
+          function list(key) {
+            var v = data.get(key);
+            if (!v) return [];
+            return v.toJS ? v.toJS() : Array.isArray(v) ? v : [];
+          }
+          function assetSrc(url) {
+            if (!url) return "";
+            try {
+              var a = getAsset(url);
+              return a ? a.toString() : url;
+            } catch (e) {
+              return url;
+            }
+          }
+
+          var title = val("title");
+          var client = val("client");
+          var cats = list("categories");
+          var mainVideo = val("mainVideo");
+          var styleFrames = list("styleFrames");
+          var processVideo = val("processVideo");
+          var processImages = list("processImages");
+          var processDesc = val("processDescription");
+          var btsVideo = val("btsVideo");
+          var btsPhotos = list("btsPhotos");
+          var btsDesc = val("btsDescription");
+          var extraVideos = [
+            val("secondVideo"),
+            val("thirdVideo"),
+            val("fourthVideo"),
+          ].filter(Boolean);
+          var credits = val("credits");
+          var hasBody = String(entry.get("raw") || "").trim().length > 0;
+
+          if (!title && !client && !mainVideo) {
+            return h(
+              "div",
+              { className: "pv" },
+              h("p", { className: "pv-empty" }, "Start typing to preview your project…")
+            );
+          }
+
+          var blocks = [];
+
+          // Header
+          blocks.push(
+            h(
+              "header",
+              { className: "pv-head", key: "head" },
+              client ? h("p", { className: "pv-client" }, client) : null,
+              h("h1", { className: "pv-title" }, title || "Untitled project"),
+              cats.length
+                ? h(
+                    "div",
+                    { className: "pv-tags" },
+                    cats.map(function (c, i) {
+                      return h("span", { className: "pv-chip", key: i }, c);
+                    })
+                  )
+                : null
+            )
+          );
+
+          // Main video
+          if (mainVideo) blocks.push(video(mainVideo, "main"));
+
+          // Overview (project summary markdown body)
+          if (hasBody) {
+            blocks.push(
+              section(
+                "Overview",
+                h("div", { className: "pv-rich" }, widgetFor("body"))
+              )
+            );
+          }
+
+          // Style frames
+          if (styleFrames.length) {
+            blocks.push(
+              section("Style frames", gallery(styleFrames, assetSrc, title))
+            );
+          }
+
+          // Process
+          if (processDesc || processVideo || processImages.length) {
+            blocks.push(
+              section("The process", [
+                processDesc
+                  ? h("div", {
+                      className: "pv-rich",
+                      key: "pd",
+                      dangerouslySetInnerHTML: { __html: processDesc },
+                    })
+                  : null,
+                processVideo ? video(processVideo, "pv") : null,
+                gallery(processImages, assetSrc, title),
+              ])
+            );
+          }
+
+          // Extra videos
+          if (extraVideos.length) {
+            blocks.push(
+              section(
+                "More from this project",
+                extraVideos.map(function (v, i) {
+                  return video(v, "extra" + i);
+                })
+              )
+            );
+          }
+
+          // Behind the scenes
+          if (btsDesc || btsVideo || btsPhotos.length) {
+            blocks.push(
+              section("Behind the scenes", [
+                btsDesc
+                  ? h("div", {
+                      className: "pv-rich",
+                      key: "bd",
+                      dangerouslySetInnerHTML: { __html: btsDesc },
+                    })
+                  : null,
+                btsVideo ? video(btsVideo, "bv") : null,
+                gallery(btsPhotos, assetSrc, title),
+              ])
+            );
+          }
+
+          // Credits
+          if (credits) {
+            blocks.push(
+              section(
+                "Credits",
+                h("div", {
+                  className: "pv-rich",
+                  dangerouslySetInnerHTML: { __html: credits },
+                })
+              )
+            );
+          }
+
+          return h("div", { className: "pv" }, blocks);
+        };
+
+        CMS.registerPreviewTemplate("projects", ProjectPreview);
       })();
     </script>
   </body>

@@ -32,16 +32,30 @@ collections:
     slug: "{{slug}}"
     identifier_field: "title"
     format: "frontmatter"
-    summary: "{{title}} — {{client}}"
-    sortable_fields: ["order", "title", "client"]
+    summary: "{{title}}"
+    # Default the list to newest/highest-priority first
+    sortable_fields:
+      fields: ["order", "title", "client"]
+      default:
+        field: "order"
+        direction: "descending"
+    # Quick filters + grouping above the project list
+    view_filters:
+      - { label: "Featured on homepage", field: "featured", pattern: true }
+      - { label: "Drafts (hidden)", field: "draft", pattern: true }
+      - { label: "Published (live)", field: "draft", pattern: false }
+    view_groups:
+      - { label: "Category", field: "categories" }
     fields:
-      - { name: "title", label: "Title", widget: "string" }
-      - { name: "client", label: "Client", widget: "string", required: false }
+      # --- The essentials --------------------------------------------------
+      - { name: "title", label: "Project title", widget: "string", hint: "Shown big at the top of the project page and on work cards." }
+      - { name: "client", label: "Client", widget: "string", required: false, hint: "The brand or company this was made for. Leave blank if none." }
       - name: "categories"
         label: "Categories"
         widget: "select"
         multiple: true
         required: false
+        hint: "Pick one or more. Controls which filters this project shows up under."
         options:
           - { label: "Design & Motion", value: "design-and-motion" }
           - { label: "Branded Content", value: "branded-content" }
@@ -49,71 +63,90 @@ collections:
           - { label: "Healthcare", value: "healthcare" }
           - { label: "Sports", value: "sports" }
           - { label: "Film & Theater", value: "film-and-theater" }
-      - { name: "order", label: "Priority", widget: "number", required: false, default: 0, value_type: "int", hint: "Higher numbers appear first in work listings" }
-      - { name: "featured", label: "Featured on homepage", widget: "boolean", required: false, default: false }
-      - { name: "draft", label: "Draft (hidden)", widget: "boolean", required: false, default: false }
-      - { name: "thumbnail", label: "Thumbnail", widget: "image", required: false, choose_url: true, hint: "Image shown on cards and listings — upload a file or paste a URL" }
-      - { name: "mainVideo", label: "Main video (Vimeo/YouTube URL)", widget: "string", required: false }
+      - { name: "thumbnail", label: "Cover image", widget: "image", required: false, choose_url: true, hint: "The image shown on work cards and listings. Upload a file or paste an image link." }
+      - { name: "mainVideo", label: "Main video", widget: "string", required: false, hint: "Paste a Vimeo or YouTube link (e.g. https://vimeo.com/123456789). Plays big at the top of the project." }
       - name: "body"
         label: "Project summary"
         widget: "markdown"
         required: false
+        hint: "A short paragraph describing the project. Appears under the Overview heading."
+
+      # --- Visibility & ordering ------------------------------------------
+      - { name: "featured", label: "Show on homepage", widget: "boolean", required: false, default: false, hint: "Turn on to feature this project on the homepage." }
+      - { name: "order", label: "Priority", widget: "number", required: false, default: 0, value_type: "int", hint: "Higher number = appears earlier in the work list. Leave at 0 for oldest/last." }
+      - { name: "draft", label: "Hide this project", widget: "boolean", required: false, default: false, hint: "Turn on to keep this project hidden from the live site (work in progress)." }
+
+      # --- Style frames ----------------------------------------------------
       - name: "styleFrames"
         label: "Style frames / screenshots"
         widget: "list"
         required: false
+        hint: "Optional gallery of stills. Upload files or paste image links."
         field: { name: "url", label: "Image", widget: "image", choose_url: true }
-      - { name: "processDescription", label: "Process description", widget: "markdown", required: false }
-      - { name: "processVideo", label: "Process / case study video", widget: "string", required: false }
+
+      # --- The process -----------------------------------------------------
+      - { name: "processDescription", label: "Process — description", widget: "markdown", required: false, hint: "Optional. Tell the story of how it was made." }
+      - { name: "processVideo", label: "Process — video", widget: "string", required: false, hint: "Optional Vimeo or YouTube link for a case-study / process video." }
       - name: "processImages"
-        label: "Process images"
+        label: "Process — images"
         widget: "list"
         required: false
+        hint: "Optional gallery of process stills."
         field: { name: "url", label: "Image", widget: "image", choose_url: true }
-      - { name: "btsDescription", label: "Behind the scenes description", widget: "markdown", required: false }
-      - { name: "btsVideo", label: "BTS video", widget: "string", required: false }
+
+      # --- More videos -----------------------------------------------------
+      - { name: "secondVideo", label: "Extra video 2", widget: "string", required: false, hint: "Optional additional Vimeo/YouTube link." }
+      - { name: "thirdVideo", label: "Extra video 3", widget: "string", required: false, hint: "Optional additional Vimeo/YouTube link." }
+      - { name: "fourthVideo", label: "Extra video 4", widget: "string", required: false, hint: "Optional additional Vimeo/YouTube link." }
+
+      # --- Behind the scenes ----------------------------------------------
+      - { name: "btsDescription", label: "Behind the scenes — description", widget: "markdown", required: false, hint: "Optional behind-the-scenes write-up." }
+      - { name: "btsVideo", label: "Behind the scenes — video", widget: "string", required: false, hint: "Optional Vimeo/YouTube link." }
       - name: "btsPhotos"
-        label: "BTS photos"
+        label: "Behind the scenes — photos"
         widget: "list"
         required: false
+        hint: "Optional gallery of behind-the-scenes photos."
         field: { name: "url", label: "Image", widget: "image", choose_url: true }
-      - { name: "secondVideo", label: "Second video", widget: "string", required: false }
-      - { name: "thirdVideo", label: "Third video", widget: "string", required: false }
-      - { name: "fourthVideo", label: "Fourth video", widget: "string", required: false }
-      - { name: "credits", label: "Credits", widget: "markdown", required: false }
+
+      # --- Credits ---------------------------------------------------------
+      - { name: "credits", label: "Credits", widget: "markdown", required: false, hint: "Optional. Roles and names for the people/companies involved." }
 
   - name: "settings"
     label: "Site Settings"
+    label_singular: "Site Settings"
+    description: "Global content used across the site — brand info, contact details, and the About page copy."
     files:
       - name: "site"
         label: "Site Content"
         file: "src/content/settings/site.json"
         fields:
           - name: "brand"
-            label: "Brand"
+            label: "Brand & contact"
             widget: "object"
             fields:
-              - { name: "name", label: "Name", widget: "string" }
-              - { name: "shortName", label: "Short name", widget: "string" }
-              - { name: "heroLineOne", label: "Hero line one", widget: "string" }
-              - { name: "heroLineTwo", label: "Hero line two", widget: "string" }
-              - { name: "tagline", label: "Tagline", widget: "text" }
+              - { name: "name", label: "Studio name", widget: "string" }
+              - { name: "shortName", label: "Short name", widget: "string", hint: "Abbreviated name used in tight spaces." }
+              - { name: "heroLineOne", label: "Homepage headline — line 1", widget: "string" }
+              - { name: "heroLineTwo", label: "Homepage headline — line 2", widget: "string" }
+              - { name: "tagline", label: "Tagline", widget: "text", hint: "One-sentence description of the studio." }
               - { name: "location", label: "Location", widget: "string" }
-              - { name: "email", label: "Email", widget: "string" }
+              - { name: "email", label: "Contact email", widget: "string" }
               - { name: "phone", label: "Phone", widget: "string" }
-              - { name: "copyright", label: "Copyright", widget: "string" }
+              - { name: "copyright", label: "Footer copyright", widget: "string" }
           - name: "social"
-            label: "Social"
+            label: "Social links"
             widget: "object"
+            hint: "Full URLs to your social profiles."
             fields:
-              - { name: "linkedin", label: "LinkedIn", widget: "string" }
-              - { name: "instagram", label: "Instagram", widget: "string" }
-              - { name: "twitter", label: "Twitter", widget: "string" }
+              - { name: "linkedin", label: "LinkedIn", widget: "string", required: false }
+              - { name: "instagram", label: "Instagram", widget: "string", required: false }
+              - { name: "twitter", label: "Twitter / X", widget: "string", required: false }
           - name: "about"
-            label: "About"
+            label: "About page"
             widget: "object"
             fields:
-              - { name: "lead", label: "Homepage lead", widget: "text" }
+              - { name: "lead", label: "Homepage intro paragraph", widget: "text" }
               - { name: "intro", label: "About intro", widget: "text" }
               - { name: "mission", label: "Mission", widget: "text" }
               - { name: "vision", label: "Vision", widget: "text" }

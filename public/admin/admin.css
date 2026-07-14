@@ -1,0 +1,395 @@
+/* =========================================================================
+   Pretty Damn Sweet — Decap CMS dark theme
+   Decap has no theming API, so we override its emotion class names (which
+   keep stable component-label suffixes like `-AppHeader`) plus base form
+   elements. If a selector ever misses, that control simply stays default —
+   nothing breaks.
+   ========================================================================= */
+
+:root {
+  --pds-bg: #07070c;
+  --pds-bg-2: #0d1018;
+  --pds-bg-3: #141821;
+  --pds-panel: #101420;
+  --pds-panel-2: #171c28;
+  --pds-line: rgba(255, 255, 255, 0.12);
+  --pds-line-strong: rgba(255, 255, 255, 0.22);
+  --pds-text: #f7f7f5;
+  --pds-muted: #9a9aa4;
+  --pds-accent: #ff4d2e;
+  --pds-accent-2: #ffffff;
+  --pds-radius: 10px;
+  --pds-mono: "Fira Mono", ui-monospace, monospace;
+  --pds-sans: "Inter", system-ui, sans-serif;
+}
+
+/* ---- Base ------------------------------------------------------------- */
+html,
+body,
+#nc-root {
+  background: var(--pds-bg) !important;
+  color: var(--pds-text);
+  font-family: var(--pds-sans);
+}
+
+#nc-root [class*="Root"],
+#nc-root [class*="Main"],
+#nc-root [class*="Content"] {
+  background-color: transparent;
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--pds-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--pds-line-strong);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---- Login screen ----------------------------------------------------- */
+[class*="PageWrapper"],
+[class*="GlobalStylesWrapper"] {
+  background: radial-gradient(
+      1200px 600px at 50% -10%,
+      rgba(255, 77, 46, 0.16),
+      transparent 60%
+    ),
+    var(--pds-bg) !important;
+}
+
+[class*="LoginButton"],
+button[class*="Login"] {
+  background: var(--pds-text) !important;
+  color: var(--pds-bg) !important;
+  font-family: var(--pds-mono) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600 !important;
+  border-radius: 2px !important;
+  padding: 0.95em 1.8em !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+[class*="LoginButton"]:hover,
+button[class*="Login"]:hover {
+  transform: translateY(-1px);
+  background: var(--pds-accent) !important;
+  color: #fff !important;
+}
+
+/* ---- Top app bar ------------------------------------------------------ */
+[class*="AppHeader"] {
+  background: rgba(7, 7, 12, 0.92) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--pds-line) !important;
+  box-shadow: none !important;
+}
+[class*="AppHeader"] a,
+[class*="AppHeader"] button {
+  color: var(--pds-text) !important;
+}
+[class*="AppHeaderNavLink"] {
+  color: var(--pds-muted) !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 13px;
+}
+[class*="AppHeaderNavLink"]:hover,
+[class*="AppHeaderNavLink"][class*="active"] {
+  color: var(--pds-text) !important;
+}
+[class*="AppHeaderActions"] [class*="Dropdown"] {
+  color: var(--pds-text) !important;
+}
+
+/* Primary "New" / quick-create buttons */
+[class*="AppHeaderButton"],
+[class*="ToolbarButton"],
+button[class*="Primary"] {
+  background: var(--pds-panel-2) !important;
+  color: var(--pds-text) !important;
+  border: 1px solid var(--pds-line) !important;
+  border-radius: 2px !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+[class*="AppHeaderButton"]:hover,
+button[class*="Primary"]:hover {
+  border-color: var(--pds-line-strong) !important;
+  background: var(--pds-bg-3) !important;
+}
+
+/* ---- Sidebar (collections) ------------------------------------------- */
+[class*="SidebarContainer"],
+[class*="Sidebar"] {
+  background: var(--pds-panel) !important;
+  border-right: 1px solid var(--pds-line) !important;
+  border-radius: var(--pds-radius);
+}
+[class*="SidebarHeading"] {
+  color: var(--pds-muted) !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+}
+[class*="NavLink"] {
+  color: var(--pds-muted) !important;
+  border-radius: 6px;
+  font-weight: 500;
+}
+[class*="NavLink"]:hover {
+  background: var(--pds-bg-3) !important;
+  color: var(--pds-text) !important;
+}
+[class*="NavLink"][class*="active"],
+[class*="NavLink"].active {
+  background: var(--pds-bg-3) !important;
+  color: var(--pds-text) !important;
+  box-shadow: inset 3px 0 0 var(--pds-accent);
+}
+
+/* ---- Collection list / cards ----------------------------------------- */
+[class*="CollectionTop"],
+[class*="CollectionMain"],
+[class*="ControlPane"] {
+  background: transparent !important;
+}
+[class*="CollectionTopHeading"] {
+  color: var(--pds-text) !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+[class*="CollectionTopDescription"] {
+  color: var(--pds-muted) !important;
+}
+
+[class*="ListCard"],
+[class*="Card"] {
+  background: var(--pds-panel) !important;
+  border: 1px solid var(--pds-line) !important;
+  border-radius: var(--pds-radius) !important;
+  color: var(--pds-text) !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+[class*="ListCard"]:hover,
+[class*="Card"]:hover {
+  border-color: var(--pds-line-strong) !important;
+  transform: translateY(-2px);
+}
+[class*="ListCardTitle"],
+[class*="CardHeading"] {
+  color: var(--pds-text) !important;
+  font-weight: 600;
+}
+
+/* Filter / group / sort control dropdowns above the list */
+[class*="ControlButton"],
+[class*="FilterButton"],
+[class*="ViewControls"] button {
+  background: var(--pds-panel-2) !important;
+  color: var(--pds-text) !important;
+  border: 1px solid var(--pds-line) !important;
+  border-radius: 2px !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+/* ---- Editor ----------------------------------------------------------- */
+[class*="EditorToggle"],
+[class*="EditorContainer"],
+[class*="EditorContent"],
+[class*="PreviewPaneContainer"] {
+  background: var(--pds-bg) !important;
+}
+[class*="EditorControlBar"],
+[class*="ControlPaneContainer"] {
+  background: var(--pds-bg) !important;
+}
+[class*="EditorContent"] > div {
+  border-color: var(--pds-line) !important;
+}
+
+/* Field label + hint */
+[class*="ControlContainer"] label,
+[class*="FieldLabel"] {
+  color: var(--pds-muted) !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 12px !important;
+}
+[class*="ControlHint"],
+[class*="FieldHint"] {
+  color: var(--pds-muted) !important;
+  font-style: normal;
+  opacity: 0.8;
+}
+
+/* Field wrapper */
+[class*="ControlContainer"] {
+  background: var(--pds-panel) !important;
+  border: 1px solid var(--pds-line) !important;
+  border-radius: var(--pds-radius) !important;
+  margin-bottom: 14px !important;
+}
+[class*="ControlContainer"]:focus-within {
+  border-color: var(--pds-accent) !important;
+}
+
+/* ---- Form inputs ------------------------------------------------------ */
+#nc-root input,
+#nc-root textarea,
+#nc-root select,
+[class*="Widget"] input,
+[class*="Widget"] textarea {
+  background: var(--pds-bg-2) !important;
+  color: var(--pds-text) !important;
+  border: 1px solid var(--pds-line) !important;
+  border-radius: 6px !important;
+  font-family: var(--pds-sans);
+  caret-color: var(--pds-accent);
+}
+#nc-root input::placeholder,
+#nc-root textarea::placeholder {
+  color: var(--pds-muted) !important;
+}
+#nc-root input:focus,
+#nc-root textarea:focus,
+#nc-root select:focus {
+  border-color: var(--pds-accent) !important;
+  outline: none !important;
+}
+
+/* react-select (list/select widgets) */
+[class*="control"][class*="css"] {
+  background: var(--pds-bg-2) !important;
+  border-color: var(--pds-line) !important;
+}
+[class*="menu"][class*="css"] {
+  background: var(--pds-panel-2) !important;
+  border: 1px solid var(--pds-line) !important;
+  color: var(--pds-text) !important;
+}
+[class*="option"][class*="css"]:hover,
+[class*="option"][class*="css"][class*="focused"] {
+  background: var(--pds-bg-3) !important;
+}
+[class*="multiValue"][class*="css"] {
+  background: var(--pds-bg-3) !important;
+}
+[class*="multiValue"][class*="css"] [class*="label"] {
+  color: var(--pds-text) !important;
+}
+[class*="singleValue"][class*="css"],
+[class*="placeholder"][class*="css"],
+[class*="input"][class*="css"] {
+  color: var(--pds-text) !important;
+}
+
+/* Markdown editor toolbar + surface */
+[class*="Toolbar"] {
+  background: var(--pds-panel-2) !important;
+  border-bottom: 1px solid var(--pds-line) !important;
+}
+[class*="ToolbarButton"] svg,
+[class*="Toolbar"] button svg {
+  fill: var(--pds-text) !important;
+}
+[class*="EditorControl"] [class*="Slate"],
+[class*="markdown"] {
+  background: var(--pds-bg-2) !important;
+  color: var(--pds-text) !important;
+}
+
+/* Boolean toggle */
+[class*="ToggleBackground"] {
+  background: var(--pds-line-strong) !important;
+}
+[class*="ToggleBackground"][class*="active"] {
+  background: var(--pds-accent) !important;
+}
+
+/* Lists (repeatable fields) */
+[class*="ListControl"],
+[class*="NestedObjectLabel"],
+[class*="ObjectControl"] {
+  background: var(--pds-bg-2) !important;
+  border-color: var(--pds-line) !important;
+  color: var(--pds-text) !important;
+}
+[class*="ListItemTopBar"],
+[class*="ObjectWidgetTopBar"] {
+  background: var(--pds-panel-2) !important;
+  border-color: var(--pds-line) !important;
+  color: var(--pds-text) !important;
+}
+
+/* Image / file widgets */
+[class*="ImageWidget"],
+[class*="FileWidget"],
+[class*="Empty"] {
+  background: var(--pds-bg-2) !important;
+  border: 1px dashed var(--pds-line-strong) !important;
+  color: var(--pds-muted) !important;
+  border-radius: var(--pds-radius) !important;
+}
+
+/* Save / publish toolbar buttons */
+[class*="SaveButton"],
+[class*="PublishButton"],
+[class*="StatusDropdownContainer"] button {
+  background: var(--pds-text) !important;
+  color: var(--pds-bg) !important;
+  border-radius: 2px !important;
+  font-family: var(--pds-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 600 !important;
+}
+[class*="PublishButton"]:hover,
+[class*="SaveButton"]:hover {
+  background: var(--pds-accent) !important;
+  color: #fff !important;
+}
+[class*="DeleteButton"] {
+  color: var(--pds-accent) !important;
+  background: transparent !important;
+  border: 1px solid var(--pds-line) !important;
+}
+
+/* Modals / dropdown menus */
+[class*="DropdownList"],
+[class*="MenuContainer"],
+[class*="Modal"],
+[class*="Card"][role="dialog"] {
+  background: var(--pds-panel-2) !important;
+  border: 1px solid var(--pds-line) !important;
+  color: var(--pds-text) !important;
+}
+[class*="DropdownItem"]:hover {
+  background: var(--pds-bg-3) !important;
+}
+
+/* Notifications / toasts */
+[class*="Toast"],
+[class*="Notif"] {
+  background: var(--pds-panel-2) !important;
+  color: var(--pds-text) !important;
+  border: 1px solid var(--pds-line) !important;
+}
