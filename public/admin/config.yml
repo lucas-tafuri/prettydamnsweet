@@ -1,10 +1,24 @@
+# Production: editors log in with a GitHub account that has access to the repo.
+# The login popup is handled by the serverless functions in /api (Vercel).
 backend:
-  name: git-gateway
+  name: github
+  repo: lucas-tafuri/prettydamnsweet
   branch: main
+  base_url: https://prettydamnsweet.vercel.app
+  auth_endpoint: api/auth
+  commit_messages:
+    create: "content: create {{collection}} “{{slug}}”"
+    update: "content: update {{collection}} “{{slug}}”"
+    delete: "content: delete {{collection}} “{{slug}}”"
+    uploadMedia: "content: upload “{{path}}”"
+    deleteMedia: "content: delete “{{path}}”"
 
-# Enables local editing via `npx decap-server` (run `npm run cms`) while
-# `npm run dev` is running. Visit http://localhost:4321/admin/
+# Local editing via `npm run cms` (decap-server) while `npm run dev` is running.
+# When the proxy isn't running, the GitHub backend above is used instead.
 local_backend: true
+
+site_url: https://prettydamnsweet.vercel.app
+display_url: https://prettydamnsweet.vercel.app
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -38,31 +52,31 @@ collections:
       - { name: "order", label: "Priority", widget: "number", required: false, default: 0, value_type: "int", hint: "Higher numbers appear first in work listings" }
       - { name: "featured", label: "Featured on homepage", widget: "boolean", required: false, default: false }
       - { name: "draft", label: "Draft (hidden)", widget: "boolean", required: false, default: false }
-      - { name: "thumbnail", label: "Thumbnail URL", widget: "string", required: false, hint: "Image URL used on cards and listings" }
+      - { name: "thumbnail", label: "Thumbnail", widget: "image", required: false, choose_url: true, hint: "Image shown on cards and listings — upload a file or paste a URL" }
       - { name: "mainVideo", label: "Main video (Vimeo/YouTube URL)", widget: "string", required: false }
       - name: "body"
         label: "Project summary"
         widget: "markdown"
         required: false
       - name: "styleFrames"
-        label: "Style frames / screenshots (image URLs)"
+        label: "Style frames / screenshots"
         widget: "list"
         required: false
-        field: { name: "url", label: "Image URL", widget: "string" }
+        field: { name: "url", label: "Image", widget: "image", choose_url: true }
       - { name: "processDescription", label: "Process description", widget: "markdown", required: false }
       - { name: "processVideo", label: "Process / case study video", widget: "string", required: false }
       - name: "processImages"
-        label: "Process images (URLs)"
+        label: "Process images"
         widget: "list"
         required: false
-        field: { name: "url", label: "Image URL", widget: "string" }
+        field: { name: "url", label: "Image", widget: "image", choose_url: true }
       - { name: "btsDescription", label: "Behind the scenes description", widget: "markdown", required: false }
       - { name: "btsVideo", label: "BTS video", widget: "string", required: false }
       - name: "btsPhotos"
-        label: "BTS photos (URLs)"
+        label: "BTS photos"
         widget: "list"
         required: false
-        field: { name: "url", label: "Image URL", widget: "string" }
+        field: { name: "url", label: "Image", widget: "image", choose_url: true }
       - { name: "secondVideo", label: "Second video", widget: "string", required: false }
       - { name: "thirdVideo", label: "Third video", widget: "string", required: false }
       - { name: "fourthVideo", label: "Fourth video", widget: "string", required: false }

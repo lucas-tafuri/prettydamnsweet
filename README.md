@@ -45,9 +45,26 @@ npm run cms      # starts decap-server on port 8081
 Then open the admin, click **Login** (no credentials needed), and edits are written
 straight back to the content files.
 
-For production editing, `public/admin/config.yml` is configured for the
-`git-gateway` backend (works with Netlify Identity / Git Gateway). Point it at your
-Git host and enable Identity to let editors log in on the live site.
+### Editing on the live site (production)
+
+The admin panel at **https://prettydamnsweet.vercel.app/admin/** uses the GitHub
+backend: editors sign in with a GitHub account that has write access to this repo,
+edit content in forms, and hit **Publish**. Each publish is a commit to `main`,
+which triggers a Vercel redeploy (live in ~1 minute).
+
+One-time setup (repo owner):
+
+1. Create a GitHub OAuth app at https://github.com/settings/applications/new
+   - Application name: `Pretty Damn Sweet CMS`
+   - Homepage URL: `https://prettydamnsweet.vercel.app`
+   - Authorization callback URL: `https://prettydamnsweet.vercel.app/api/callback`
+2. In the Vercel project → Settings → Environment Variables, add:
+   - `OAUTH_GITHUB_CLIENT_ID` — the OAuth app's Client ID
+   - `OAUTH_GITHUB_CLIENT_SECRET` — a generated client secret
+3. Redeploy. The login flow is handled by the serverless functions in `api/`.
+
+To invite a non-developer editor, add their GitHub account as a collaborator on
+this repo (Settings → Collaborators) with **Write** access.
 
 ## Re-importing the CSV
 

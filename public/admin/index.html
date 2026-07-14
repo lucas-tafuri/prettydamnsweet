@@ -5,8 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager — Pretty Damn Sweet</title>
+    <style>
+      /* Loading shell shown before the CMS boots */
+      #cms-loading {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background: #07070c;
+        color: #f7f7f5;
+        font-family: ui-monospace, "Fira Mono", monospace;
+        letter-spacing: 0.02em;
+        z-index: 1;
+      }
+      #cms-loading img {
+        height: 64px;
+        width: auto;
+      }
+      #cms-loading small {
+        opacity: 0.55;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+    </style>
   </head>
   <body>
+    <div id="cms-loading">
+      <img
+        src="https://cdn.prod.website-files.com/5e60706d46e6b8635dcd70e0/6765c273b63dce3e0a6cb048_PDSICON_ALPHA.png"
+        alt="Pretty Damn Sweet"
+      />
+      <small>Loading content manager…</small>
+    </div>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      // Remove the loading shell once the CMS has rendered
+      const loadingEl = document.getElementById("cms-loading");
+      const watcher = setInterval(() => {
+        if (document.getElementById("nc-root")?.children.length) {
+          loadingEl.remove();
+          clearInterval(watcher);
+        }
+      }, 150);
+      setTimeout(() => {
+        loadingEl?.remove();
+        clearInterval(watcher);
+      }, 15000);
+    </script>
   </body>
 </html>
