@@ -9,6 +9,9 @@ const HERO_VIDEO =
 const [pretty = "Pretty", damn = "Damn", sweet = "Sweet"] = site.brand.name
   .trim()
   .split(/\s+/);
+const prettyU = pretty.toUpperCase();
+const damnU = damn.toUpperCase();
+const sweetU = sweet.toUpperCase();
 ---
 
 <section class="hero">
@@ -31,9 +34,9 @@ const [pretty = "Pretty", damn = "Damn", sweet = "Sweet"] = site.brand.name
 
   <div class="hero__type container">
     <h1 class="display hero__title">
-      <span class="hero__line hero__line--pretty" data-hero-split>{pretty}</span>
-      <span class="hero__line hero__line--damn" data-hero-split>{damn}</span>
-      <span class="hero__line hero__line--sweet" data-hero-split>{sweet}</span>
+      <span class="hero__line hero__line--pretty" data-hero-split>{prettyU}</span>
+      <span class="hero__line hero__line--damn" data-hero-split>{damnU}</span>
+      <span class="hero__line hero__line--sweet" data-hero-split>{sweetU}</span>
     </h1>
   </div>
 
@@ -125,14 +128,16 @@ const [pretty = "Pretty", damn = "Damn", sweet = "Sweet"] = site.brand.name
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    width: max-content;
+    align-items: flex-start;
+    width: fit-content;
     max-width: 100%;
     font-family: var(--font-secondary);
     font-weight: 500;
     font-size: var(--fs-display-xl);
     line-height: 0.75;
-    letter-spacing: var(--ls-xlarge);
+    /* Spacing is applied between split chars only (not after the last),
+       so Pretty's right edge and Sweet's right edge can sit flush. */
+    letter-spacing: 0;
     text-transform: uppercase;
     text-shadow: 0 2px 40px rgba(0, 0, 0, 0.35);
   }
@@ -140,14 +145,30 @@ const [pretty = "Pretty", damn = "Damn", sweet = "Sweet"] = site.brand.name
     display: block;
     overflow: hidden;
     padding-bottom: 0.05em;
+    white-space: nowrap;
+    /* Pre-JS fallback (before chars are split into spans) */
+    letter-spacing: var(--ls-xlarge);
   }
-  /* Pretty + Damn share a left edge; Sweet shares Pretty's right edge */
+  .hero__line.split-ready {
+    letter-spacing: 0;
+  }
+  /* Pretty sets the block width; Damn shares its left edge */
   .hero__line--pretty,
   .hero__line--damn {
-    text-align: left;
+    align-self: flex-start;
   }
+  /* Sweet shrink-wraps and pins to Pretty's right edge */
   .hero__line--sweet {
-    text-align: right;
+    align-self: flex-end;
+  }
+  .hero__line .split-word {
+    display: inline-block;
+  }
+  .hero__line .split-char {
+    display: inline-block;
+  }
+  .hero__line.split-ready .split-char:not(:last-child) {
+    margin-right: -0.05em; /* matches --ls-xlarge */
   }
   .hero__foot {
     display: flex;
