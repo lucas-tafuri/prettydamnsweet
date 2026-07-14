@@ -18,6 +18,12 @@ function clientSecret() {
   ).trim();
 }
 
+function mask(value) {
+  if (!value) return "(missing)";
+  if (value.length <= 8) return `${value.slice(0, 2)}…`;
+  return `${value.slice(0, 4)}…${value.slice(-4)} (len ${value.length})`;
+}
+
 function renderPage(status, content) {
   const payload = JSON.stringify(content);
   const safePayload = payload.replace(/</g, "\\u003c");
@@ -43,19 +49,29 @@ function renderPage(status, content) {
         padding: 2rem;
         text-align: center;
       }
+      small { opacity: 0.55; display: block; margin-top: 1rem; max-width: 36rem; }
     </style>
   </head>
   <body>
-    <p id="msg">${label}</p>
+    <div>
+      <p id="msg">${label}</p>
+      ${
+        status === "error" && content.hint
+          ? `<small>${content.hint}</small>`
+          : ""
+      }
+    </div>
     <script>
       (function () {
         var status = ${JSON.stringify(status)};
         var content = ${safePayload};
         var message =
-          "authorization:github:" + status + ":" + JSON.stringify(content);
+          "authorization:github:" + status + ":" + JSON.stringify({
+            error: content.error,
+            token: content.token,
+            provider: content.provider
+          });
 
-        // Fallback for when window.opener is null (GitHub COOP).
-        // Same-origin as /admin, so the parent page can poll this key.
         try {
           localStorage.setItem(
             "pds-cms-oauth",
@@ -89,8 +105,6 @@ function renderPage(status, content) {
 
         if (window.opener) {
           window.opener.postMessage("authorizing:github", "*");
-          // Also send the final message after a short delay in case the
-          // handshake reply is missed (some browsers drop the first message).
           setTimeout(function () { reply("*"); }, 600);
           setTimeout(function () {
             try { window.close(); } catch (e) {}
@@ -112,6 +126,14 @@ export default async function handler(req, res) {
   const secret = clientSecret();
   const code = typeof req.query?.code === "string" ? req.query.code : "";
 
+  const host = String(req.headers["x-forwarded-host"] || req.headers.host)
+    .split(",")[0]
+    .trim();
+  const proto = String(req.headers["x-forwarded-proto"] || "https")
+    .split(",")[0]
+    .trim();
+  const redirectUri = `${proto}://${host}/api/callback`;
+
   let status = "error";
   let content = { error: "Unknown error" };
 
@@ -119,30 +141,39 @@ export default async function handler(req, res) {
     content = {
       error:
         "Missing OAuth env vars on Vercel (need OAUTH_GITHUB_CLIENT_ID and OAUTH_GITHUB_CLIENT_SECRET)",
+      hint: `client_id=${mask(id)} client_secret=${mask(secret)}`,
     };
   } else if (!code) {
     content = { error: "Missing authorization code from GitHub" };
   } else {
     try {
+      // GitHub requires the same redirect_uri used in /authorize.
+      // Prefer form-urlencoded — most reliable against GitHub's token endpoint.
+      const body = new URLSearchParams({
+        client_id: id,
+        client_secret: secret,
+        code,
+        redirect_uri: redirectUri,
+      });
+
       const tokenRes = await fetch(
         "https://github.com/login/oauth/access_token",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             Accept: "application/json",
           },
-          body: JSON.stringify({
-            client_id: id,
-            client_secret: secret,
-            code,
-          }),
+          body,
         }
       );
       const data = await tokenRes.json();
+
       if (data.error || !data.access_token) {
         content = {
-          error: data.error_description || data.error || "Token exchange failed",
+          error:
+            data.error_description || data.error || "Token exchange failed",
+          hint: `Using client_id ${mask(id)}, redirect_uri ${redirectUri}. Confirm this Client ID matches your GitHub OAuth App, the secret is a Client secret (not a PAT), and the callback URL is exactly ${redirectUri}`,
         };
       } else {
         status = "success";
@@ -155,7 +186,6 @@ export default async function handler(req, res) {
 
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
-  // Keep opener relationship intact on our side
   res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
   res.status(200).send(renderPage(status, content));
 }

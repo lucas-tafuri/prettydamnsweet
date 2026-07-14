@@ -20,10 +20,17 @@ export default function handler(req, res) {
     return;
   }
 
-  const host = req.headers["x-forwarded-host"] || req.headers.host;
+  const host = String(req.headers["x-forwarded-host"] || req.headers.host)
+    .split(",")[0]
+    .trim();
+  const proto = String(req.headers["x-forwarded-proto"] || "https")
+    .split(",")[0]
+    .trim();
+  const redirectUri = `${proto}://${host}/api/callback`;
+
   const url = new URL("https://github.com/login/oauth/authorize");
   url.searchParams.set("client_id", id);
-  url.searchParams.set("redirect_uri", `https://${host}/api/callback`);
+  url.searchParams.set("redirect_uri", redirectUri);
   url.searchParams.set("scope", "repo,user");
   url.searchParams.set("state", crypto.randomBytes(16).toString("hex"));
 
