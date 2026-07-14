@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager — Pretty Damn Sweet</title>
+    <!-- Absolute path so Decap finds config even when visiting /admin (no trailing slash) -->
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <style>
       /* Loading shell shown before the CMS boots */
       #cms-loading {
