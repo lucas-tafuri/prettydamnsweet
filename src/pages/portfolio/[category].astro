@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import PortfolioListing from "../../components/PortfolioListing.astro";
+import { CATEGORIES, CATEGORY_BY_SLUG, type CategorySlug } from "../../lib/categories";
+import { sortByPriority } from "../../lib/projects";
+
+export async function getStaticPaths() {
+  // Category defs must live inside (or be imported into) getStaticPaths —
+  // Astro isolates this function from other frontmatter locals.
+  const all = await getCollection("projects", ({ data }) => !data.draft);
+
+  return CATEGORIES.map((meta) => {
+    const projects = sortByPriority(
+      all.filter((p) => p.data.categories.includes(meta.slug))
+    );
+    return {
+      params: { category: meta.slug },
+      props: { slug: meta.slug as CategorySlug, projects },
+    };
+  });
+}
+
+interface Props {
+  slug: CategorySlug;
+  projects: Awaited<ReturnType<typeof getCollection>>;
+}
+
+const { slug, projects } = Astro.props;
+const meta = CATEGORY_BY_SLUG[slug];
+---
+
+<Layout title={`${meta.title} — Pretty Damn Sweet`} description={meta.blurb} dark={true}>
+  <PortfolioListing
+    title={meta.title}
+    blurb={meta.blurb}
+    activeSlug={slug}
+    projects={projects}
+  />
+</Layout>

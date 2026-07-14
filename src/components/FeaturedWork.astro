@@ -1,0 +1,152 @@
+---
+import { CATEGORY_LABELS, categoryLabel } from "../lib/categories";
+
+interface Props {
+  href: string;
+  title: string;
+  client?: string;
+  thumbnail?: string;
+  summary?: string;
+  categories?: string[];
+}
+const { href, title, client, thumbnail, summary, categories = [] } = Astro.props;
+
+function stripHtml(html?: string): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+const blurb = stripHtml(summary).slice(0, 180);
+const primaryCat = categories[0] ? categoryLabel(categories[0]) : "";
+---
+
+<article class="fw">
+  <div class="fw__info" data-animate="left">
+    <div class="fw__block" data-left-item>
+      <a class="fw__titlelink" href={href}>
+        <h3 class="fw__title">{title}</h3>
+      </a>
+      {blurb && <p class="fw__blurb">{blurb}</p>}
+    </div>
+
+    {client && (
+      <div class="fw__block fw__field" data-left-item>
+        <span class="fw__label">Client</span>
+        <span class="fw__value">{client}</span>
+      </div>
+    )}
+
+    {primaryCat && (
+      <div class="fw__block fw__field" data-left-item>
+        <span class="fw__label">Project status</span>
+        <span class="fw__value">{primaryCat}</span>
+      </div>
+    )}
+
+    {categories.length > 0 && (
+      <div class="fw__block fw__tags" data-left-item>
+        {categories.map((slug) => (
+          <a class="chip" href={`/portfolio/${slug}`}>{CATEGORY_LABELS[slug] ?? slug}</a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <a class="fw__media media-frame plus-corners" href={href} data-animate="media" data-cursor-media>
+    {
+      thumbnail ? (
+        <img src={thumbnail} alt={title} loading="lazy" />
+      ) : (
+        <div class="fw__placeholder">PDS</div>
+      )
+    }
+    <span class="media-frame__shade" aria-hidden="true"></span>
+    <span class="btn-ghost" data-cursor-btn aria-hidden="true">View project →</span>
+  </a>
+</article>
+
+<style>
+  .fw {
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+  .fw__title {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.2;
+    text-transform: uppercase;
+    display: inline;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    transition: background-size 0.4s ease;
+  }
+  .fw__titlelink:hover .fw__title {
+    background-size: 100% 1px;
+  }
+  .fw__blurb {
+    margin: 1.2rem 0 0;
+    color: var(--muted-dark);
+    font-family: var(--font-primary);
+    font-size: var(--fs-body);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.4;
+  }
+  .fw__block {
+    margin-bottom: 1.6rem;
+  }
+  .fw__label {
+    display: block;
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  .fw__value {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--fs-h4);
+    letter-spacing: var(--ls-xlarge);
+  }
+  .fw__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0;
+  }
+  .fw__media {
+    aspect-ratio: 16 / 10;
+  }
+  .fw__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    font-size: 3rem;
+    color: var(--muted);
+    background: var(--bg-cream);
+  }
+  @media (max-width: 780px) {
+    .fw {
+      grid-template-columns: 1fr;
+    }
+    .fw__media {
+      order: -1;
+    }
+  }
+</style>

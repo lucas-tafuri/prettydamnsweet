@@ -1,0 +1,89 @@
+{
+  "brand": {
+    "name": "Pretty Damn Sweet",
+    "shortName": "PDS",
+    "heroLineOne": "PRETTY DAMN",
+    "heroLineTwo": "SWEET",
+    "tagline": "An immersive content studio with a passion for mixing imagination with innovation",
+    "location": "Philadelphia, PA",
+    "email": "hello@prettydamnsweet.com",
+    "phone": "215.545.5060",
+    "copyright": "©2024 Pretty Damn Sweet"
+  },
+  "social": {
+    "linkedin": "https://www.linkedin.com/company/prettydamnsweet",
+    "instagram": "https://www.instagram.com/prettydamnsweetagram/",
+    "twitter": "https://twitter.com/prettydamnsweet"
+  },
+  "about": {
+    "lead": "We are a creative studio that pushes the boundaries of content, technology, and the ways people enjoy them.",
+    "intro": "Pretty Damn Sweet is more than a production company. Our content studio offers the creative power to bolster the work of agencies and the craftsmanship of a full service production studio. We specialize in bringing creativity and ingenuity together for screens of all sizes. Our combined passion for design, story and innovation allows us to produce bold new content for our clients. The experience and resources at our disposal enable us to create memorable work that elevates the entire creative process.",
+    "mission": "We are experts in our craft with decades of experience creating a variety of content, and we believe in simplicity — we'll never add noise to the conversation.",
+    "vision": "Process is paramount. Our powerful team and workflow allows us to succeed under any circumstances, and we want to make the world a bigger place. That's why we do this."
+  },
+  "stats": [
+    { "value": "20+", "label": "Years Experience" },
+    { "value": "150+", "label": "Projects Delivered" }
+  ],
+  "reputation": [
+    { "label": "Design & Motion", "value": "Bold" },
+    { "label": "Branded Content", "value": "Immersive" }
+  ],
+  "whyPds": [
+    {
+      "title": "We are experts in our craft",
+      "body": "We have decades of experience in creating a variety of content across screens of all sizes, from broadcast to immersive installations."
+    },
+    {
+      "title": "We believe in simplicity",
+      "body": "We'll never add noise to the conversation. Clarity and craft guide every decision we make on a project."
+    },
+    {
+      "title": "Process is paramount",
+      "body": "Our powerful team and workflow allows us to succeed under any circumstances, even with tight timelines or evolving requirements."
+    },
+    {
+      "title": "We're collaborative",
+      "body": "We're good listeners and want to enjoy the process. Work should be fun, and collaboration makes the work better."
+    }
+  ],
+  "services": [
+    {
+      "title": "BRANDED CONTENT",
+      "slug": "branded-content",
+      "description": "Creative development, concept and writing, crew and talent management, production, post-production, editing, sound and finishing — full service storytelling for brands.",
+      "capabilities": [
+        "Creative Development",
+        "Concept + Writing",
+        "Crew and Talent Management",
+        "Production",
+        "Post-Production",
+        "Editing, Sound, Finishing"
+      ]
+    },
+    {
+      "title": "DESIGN AND MOTION",
+      "slug": "design-and-motion",
+      "description": "CGI-driven design and animation, VFX and compositing, 2D vector animation, and hand drawn / stop motion. Bold design brought to life with captivating movement.",
+      "capabilities": [
+        "CGI-Driven Design and Animation",
+        "VFX / Compositing",
+        "2D Vector Animation",
+        "Hand Drawn / Stop Motion"
+      ]
+    },
+    {
+      "title": "IMMERSIVE EXPERIENCES",
+      "slug": "immersive-experiences",
+      "description": "Screens producing, media server design and programming, Notch design and implementation, projection mapping, interactive programming, AR/XR and mixed reality media.",
+      "capabilities": [
+        "Screens Producing",
+        "Media Server Design + Programming",
+        "Notch Design / Implementation",
+        "Projection Mapping",
+        "Interactive Programming",
+        "AR/XR Mixed Reality Media"
+      ]
+    }
+  ]
+}

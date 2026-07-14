@@ -1,0 +1,544 @@
+:root {
+  /* Colors */
+  --bg-dark: #07070c;
+  --bg-dark-2: #0d1018;
+  --bg-light: #ffffff;
+  --bg-cream: #f4f2ee;
+  --text-dark: #0a0a0a;
+  --text-light: #f7f7f5;
+  --muted: #8a8a90;
+  --muted-dark: #55555c;
+  --line: #e3e1dc;
+  --line-dark: rgba(255, 255, 255, 0.14);
+  --chip: #f0eeea;
+  --accent: #1a1a1a;
+
+  /* Fonts — match Egnis */
+  --font-primary: "Inter", sans-serif;
+  --font-secondary: "Fira Mono", monospace;
+  --font-body: var(--font-primary);
+  --font-display: var(--font-secondary);
+  --font-mono: var(--font-secondary);
+
+  /* Letter-spacing scale (Egnis) */
+  --ls-none: 0em;
+  --ls-small: -0.01em;
+  --ls-default: -0.02em;
+  --ls-medium: -0.03em;
+  --ls-large: -0.04em;
+  --ls-xlarge: -0.05em;
+
+  /* Type scale — desktop default (992–1279) */
+  --fs-display-xl: 240px;
+  --fs-display-01: 160px;
+  --fs-display-02: 76px;
+  --fs-h1: 46px;
+  --fs-h2: 36px;
+  --fs-h3: 26px;
+  --fs-h4: 20px;
+  --fs-body: 16px;
+  --fs-tag: 14px;
+  --fs-button: 14px;
+
+  --maxw: 1400px;
+  --pad: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* Egnis breakpoints */
+@media screen and (min-width: 1280px) {
+  :root {
+    --fs-display-xl: 320px;
+    --fs-display-01: 200px;
+    --fs-display-02: 76px;
+    --fs-h1: 46px;
+    --fs-h2: 36px;
+    --fs-h3: 26px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  :root {
+    --fs-display-xl: 190px;
+    --fs-display-01: 140px;
+    --fs-display-02: 76px;
+    --fs-h1: 46px;
+    --fs-h2: 36px;
+    --fs-h3: 26px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :root {
+    --fs-display-xl: 120px;
+    --fs-display-01: 80px;
+    --fs-display-02: 54px;
+    --fs-h1: 36px;
+    --fs-h2: 32px;
+    --fs-h3: 24px;
+    --fs-h4: 18px;
+    --fs-body: 15px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  :root {
+    --fs-display-xl: 100px;
+    --fs-display-01: 54px;
+    --fs-display-02: 40px;
+    --fs-h1: 32px;
+    --fs-h2: 32px;
+    --fs-h3: 24px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: var(--ls-xlarge);
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: var(--ls-xlarge);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--pad);
+}
+
+/* Tag / eyebrow labels — Fira Mono 14px (Egnis .tag-text) */
+.eyebrow {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-tag);
+  font-weight: 500;
+  letter-spacing: var(--ls-none);
+  line-height: 1.14;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0;
+}
+
+.eyebrow--bar::before {
+  content: "";
+  width: 3px;
+  height: 0.9em;
+  background: var(--text-dark);
+  display: inline-block;
+}
+
+.section--dark .eyebrow--bar::before {
+  background: var(--text-light);
+}
+
+/* Mission / Vision style labels use Inter semi-bold, not mono */
+.eyebrow--paren {
+  font-family: var(--font-primary);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  letter-spacing: var(--ls-xlarge);
+  text-transform: none;
+  color: var(--text-dark);
+  gap: 0.35em;
+}
+
+.section--dark .eyebrow--paren {
+  color: var(--text-light);
+}
+
+.eyebrow--paren::before {
+  content: "(";
+}
+.eyebrow--paren::after {
+  content: ")";
+}
+
+/* Section framing */
+.section {
+  padding-block: clamp(3.5rem, 8vw, 7rem);
+}
+
+.section--dark {
+  background: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px dashed var(--line);
+  margin: 0;
+}
+
+.section--dark .divider {
+  border-top-color: var(--line-dark);
+}
+
+/* Display — Fira Mono (Egnis .display-xlarge) */
+.display {
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  line-height: 0.75;
+  letter-spacing: var(--ls-xlarge);
+  text-transform: uppercase;
+}
+
+.h-huge {
+  font-size: var(--fs-display-xl);
+}
+
+/* Section headings — Inter semi-bold (Egnis heading-01 / heading-02) */
+.h-section {
+  font-family: var(--font-primary);
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  letter-spacing: var(--ls-xlarge);
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.h-section--sm {
+  font-size: var(--fs-h2);
+}
+
+.h-mono {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  letter-spacing: var(--ls-xlarge);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Buttons — Inter, matching Egnis CTA style */
+.btn {
+  font-family: var(--font-primary);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  letter-spacing: var(--ls-xlarge);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.85em 1.4em;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.btn:hover {
+  background: var(--text-dark);
+  color: var(--bg-light);
+}
+
+.section--dark .btn:hover {
+  background: var(--text-light);
+  color: var(--text-dark);
+}
+
+.btn--solid {
+  background: var(--text-dark);
+  color: var(--bg-light);
+}
+
+.section--dark .btn--solid {
+  background: var(--text-light);
+  color: var(--text-dark);
+}
+
+.btn--solid:hover {
+  opacity: 0.85;
+  background: var(--text-dark);
+  color: var(--bg-light);
+}
+
+/* Chips / tags */
+.chip {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-tag);
+  font-weight: 500;
+  letter-spacing: var(--ls-none);
+  line-height: 1.14;
+  text-transform: uppercase;
+  padding: 0.5em 1em;
+  border-radius: 100px;
+  background: var(--chip);
+  color: var(--muted-dark);
+  display: inline-block;
+}
+
+.section--dark .chip {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+}
+
+/* Rich text (credits, summaries from CMS) */
+.rich a {
+  text-decoration: underline;
+}
+.rich p {
+  margin: 0 0 0.8em;
+}
+.rich strong {
+  font-weight: 600;
+}
+
+/* Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Scroll split-text (Egnis-style letter reveal) */
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.split-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ============================================
+   Egnis-style interactive design utilities
+   ============================================ */
+
+/* Film-grain / noise texture overlay */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Four "+" corner particles pinned inside a media frame (Egnis work-widget-particle) */
+.plus-corners::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' fill='white'%3E%3Cpath d='M3.07 7.68V0h1.53v7.68H3.07ZM0 4.6V3.07h7.68V4.6H0Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' fill='white'%3E%3Cpath d='M3.07 7.68V0h1.53v7.68H3.07ZM0 4.6V3.07h7.68V4.6H0Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' fill='white'%3E%3Cpath d='M3.07 7.68V0h1.53v7.68H3.07ZM0 4.6V3.07h7.68V4.6H0Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' fill='white'%3E%3Cpath d='M3.07 7.68V0h1.53v7.68H3.07ZM0 4.6V3.07h7.68V4.6H0Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: top left, top right, bottom left, bottom right;
+  background-size: 12px 12px;
+}
+
+/* "+" particle rows flanking dark banner content (Egnis section-particles-block) */
+.particles-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(247, 247, 245, 0.85);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Shared media frame: rounded, hover overlay + zoom (Egnis work-widget-right) */
+.media-frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--chip);
+  cursor: none;
+}
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.media-frame:hover img,
+.media-frame.is-hover img {
+  transform: scale(1.04);
+}
+
+/* Soft dim while hovering — keeps the glass CTA readable */
+.media-frame__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.media-frame:hover .media-frame__shade,
+.media-frame.is-hover .media-frame__shade {
+  opacity: 1;
+}
+
+/* Frosted glass CTA that follows the cursor */
+.btn-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  pointer-events: none;
+  font-family: var(--font-secondary);
+  font-size: var(--fs-tag);
+  font-weight: 500;
+  letter-spacing: var(--ls-none);
+  text-transform: uppercase;
+  color: #fff;
+  padding: 0.85em 1.6em;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px) saturate(1.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.35);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  opacity: 0;
+  /* Position is driven by JS; only fade opacity here */
+  transition: opacity 0.28s ease;
+  will-change: transform, opacity;
+}
+.media-frame:hover .btn-ghost,
+.media-frame.is-hover .btn-ghost {
+  opacity: 1;
+}
+
+/* Touch / reduced-motion: center the CTA instead of tracking */
+.media-frame--static-cta {
+  cursor: pointer;
+}
+.media-frame--static-cta .btn-ghost {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.media-frame--static-cta:hover .btn-ghost,
+.media-frame--static-cta.is-hover .btn-ghost {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@media (pointer: coarse) {
+  .media-frame {
+    cursor: pointer;
+  }
+}
+
+/* Legacy overlay class kept for any leftover markup */
+.media-frame__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Animated blurred banner backgrounds (about / contact) */
+.banner-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.banner-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform;
+  animation: blob-drift 18s ease-in-out infinite alternate;
+}
+.banner-bg__blob--2 {
+  animation-duration: 24s;
+  animation-direction: alternate-reverse;
+}
+.banner-bg__blob--3 {
+  animation-duration: 30s;
+}
+@keyframes blob-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8vw, -6vh) scale(1.15);
+  }
+  100% {
+    transform: translate(-6vw, 5vh) scale(0.95);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .banner-bg__blob {
+    animation: none;
+  }
+}

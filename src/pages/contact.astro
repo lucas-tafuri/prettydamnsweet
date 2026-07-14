@@ -1,0 +1,161 @@
+---
+import Layout from "../layouts/Layout.astro";
+import site from "../content/settings/site.json";
+---
+
+<Layout title="Contact — Pretty Damn Sweet" dark={true}>
+  <section class="chero section--dark grain">
+    <div class="banner-bg" aria-hidden="true">
+      <div class="banner-bg__blob chero__blob1"></div>
+      <div class="banner-bg__blob banner-bg__blob--2 chero__blob2"></div>
+      <div class="banner-bg__blob banner-bg__blob--3 chero__blob3"></div>
+    </div>
+    <div class="container chero__inner">
+      <div class="particles-row chero__particles" aria-hidden="true">
+        <span>+</span><span>+</span>
+      </div>
+      <p class="eyebrow eyebrow--bar" data-animate="fade">Contact</p>
+      <h1 class="display chero__title">
+        <span class="chero__line" data-hero-split>Let's work</span>
+        <span class="chero__line" data-hero-split>together</span>
+      </h1>
+      <div class="particles-row chero__particles" aria-hidden="true">
+        <span>+</span><span>+</span>
+      </div>
+
+      <div class="cgrid">
+        <div class="ccol">
+          <span class="clabel">Email</span>
+          <a class="cbig" href={`mailto:${site.brand.email}`}>{site.brand.email}</a>
+        </div>
+        <div class="ccol">
+          <span class="clabel">Phone</span>
+          <a class="cbig" href={`tel:${site.brand.phone}`}>{site.brand.phone}</a>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="cbottom">
+        <div class="ccol">
+          <span class="clabel">Studio</span>
+          <p class="cmeta">{site.brand.location}</p>
+        </div>
+        <div class="ccol">
+          <span class="clabel">Social</span>
+          <p class="cmeta csocial">
+            <a href={site.social.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+            <a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a>
+            <a href={site.social.twitter} target="_blank" rel="noopener">Twitter</a>
+          </p>
+        </div>
+        <div class="ccol">
+          <a class="btn btn--solid" href={`mailto:${site.brand.email}`}>Send a brief →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .chero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(4rem, 10vw, 8rem);
+    overflow: hidden;
+  }
+  /* Egnis contact banner: deep crimson blurred glow drifting over near-black */
+  .chero__blob1 {
+    width: 55vw;
+    height: 55vw;
+    top: -15%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(150, 30, 25, 0.55), transparent 65%);
+  }
+  .chero__blob2 {
+    width: 45vw;
+    height: 45vw;
+    bottom: -20%;
+    left: 5%;
+    background: radial-gradient(circle, rgba(90, 15, 30, 0.5), transparent 65%);
+  }
+  .chero__blob3 {
+    width: 30vw;
+    height: 30vw;
+    top: 30%;
+    left: 40%;
+    background: radial-gradient(circle, rgba(200, 70, 40, 0.28), transparent 65%);
+  }
+  .chero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+  .chero__particles {
+    max-width: 34rem;
+    margin-block: 1.25rem;
+  }
+  .chero__title {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-secondary);
+    font-size: var(--fs-display-01);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 0.75;
+    text-transform: uppercase;
+    margin: 1.5rem 0;
+  }
+  .chero__line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+  .cgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  .clabel {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.9rem;
+  }
+  .cbig {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--fs-h2);
+    letter-spacing: var(--ls-xlarge);
+    word-break: break-word;
+  }
+  .cbig:hover { text-decoration: underline; }
+  .cbottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    padding-top: 2.5rem;
+  }
+  .cmeta {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .csocial {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .csocial a:hover { text-decoration: underline; }
+  @media (max-width: 700px) {
+    .cgrid { grid-template-columns: 1fr; gap: 1.75rem; }
+    .cbottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; }
+  }
+</style>

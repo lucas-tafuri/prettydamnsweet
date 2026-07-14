@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import PortfolioListing from "../../components/PortfolioListing.astro";
+import { sortByPriority } from "../../lib/projects";
+
+const projects = sortByPriority(
+  await getCollection("projects", ({ data }) => !data.draft)
+);
+---
+
+<Layout
+  title="Work — Pretty Damn Sweet"
+  description="Selected work across design & motion, branded content, and immersive experiences."
+  dark={true}
+>
+  <PortfolioListing
+    title="Selected work"
+    blurb="Bold content across screens of every size — from broadcast and branded film to immersive experiences."
+    activeSlug=""
+    projects={projects}
+  />
+</Layout>

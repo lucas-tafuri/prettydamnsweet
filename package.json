@@ -1,0 +1,22 @@
+{
+  "name": "prettydamnsweet",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Pretty Damn Sweet - immersive content studio, Egnis visual style",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "import": "node scripts/import-csv.mjs",
+    "cms": "decap-server"
+  },
+  "dependencies": {
+    "astro": "^5.6.1",
+    "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "decap-server": "^3.1.3"
+  }
+}

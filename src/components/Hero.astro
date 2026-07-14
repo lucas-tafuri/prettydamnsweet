@@ -1,0 +1,157 @@
+---
+import site from "../content/settings/site.json";
+
+// Same looping muted Vimeo used as the background on prettydamnsweet.com
+const HERO_VIDEO =
+  "https://player.vimeo.com/video/386290524?autoplay=1&muted=1&background=1&loop=1";
+---
+
+<section class="hero">
+  <div class="hero__video" aria-hidden="true">
+    <iframe
+      src={HERO_VIDEO}
+      title="Pretty Damn Sweet showreel background"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <div class="hero__meta container">
+    <span class="hero__meta-item hero__meta-item--tl">{site.brand.copyright}</span>
+    <span class="hero__meta-item hero__meta-item--tc">Based in<br />{site.brand.location}</span>
+    <a class="hero__meta-item hero__meta-item--tr" href={`mailto:${site.brand.email}`}>{site.brand.email}</a>
+  </div>
+
+  <div class="hero__type container">
+    <h1 class="display hero__title">
+      <span class="hero__line hero__line--1" data-hero-split>{site.brand.heroLineOne}</span>
+      <span class="hero__line hero__line--2" data-hero-split>{site.brand.heroLineTwo}</span>
+    </h1>
+  </div>
+
+  <div class="hero__foot container">
+    <p class="hero__tagline">{site.brand.tagline}</p>
+    <a class="btn btn--solid hero__cta" href="/portfolio">
+      Selected works →
+    </a>
+  </div>
+</section>
+
+<style is:global>
+  .hero {
+    position: relative;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Clear the absolute nav sitting over the video */
+    padding-top: calc(72px + clamp(1.5rem, 4vw, 3rem));
+    padding-bottom: clamp(2.5rem, 6vw, 5rem);
+    overflow: hidden;
+  }
+  .hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  /* Cover the hero like object-fit: cover, regardless of aspect ratio */
+  .hero__video iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 of viewport width */
+    min-height: 100%;
+    min-width: 177.78vh; /* 16:9 of viewport height */
+    transform: translate(-50%, -50%);
+    border: 0;
+  }
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(7, 7, 12, 0.18) 0%, rgba(7, 7, 12, 0.35) 28%, rgba(7, 7, 12, 0.55) 55%, rgba(7, 7, 12, 0.78) 100%),
+      radial-gradient(ellipse at center, transparent 30%, rgba(7, 7, 12, 0.4) 100%);
+    pointer-events: none;
+  }
+  .hero__meta,
+  .hero__type,
+  .hero__foot {
+    position: relative;
+    z-index: 2;
+  }
+  .hero__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    line-height: 1.14;
+    text-transform: uppercase;
+    color: rgba(247, 247, 245, 0.82);
+  }
+  .hero__meta-item--tr {
+    text-align: right;
+  }
+  .hero__title {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    font-size: var(--fs-display-xl);
+    line-height: 0.75;
+    letter-spacing: var(--ls-xlarge);
+    text-transform: uppercase;
+    text-shadow: 0 2px 40px rgba(0, 0, 0, 0.35);
+  }
+  .hero__line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.05em;
+  }
+  .hero__line--2 {
+    align-self: flex-end;
+    text-align: right;
+  }
+  .hero__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero__tagline {
+    max-width: 36ch;
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: var(--fs-body);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: var(--ls-xlarge);
+    color: rgba(247, 247, 245, 0.85);
+  }
+  @media (max-width: 620px) {
+    .hero__meta-item--tc { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video { display: none; }
+  }
+</style>

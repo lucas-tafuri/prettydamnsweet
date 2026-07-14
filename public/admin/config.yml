@@ -1,0 +1,134 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Enables local editing via `npx decap-server` (run `npm run cms`) while
+# `npm run dev` is running. Visit http://localhost:4321/admin/
+local_backend: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    label_singular: "Project"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "title"
+    format: "frontmatter"
+    summary: "{{title}} — {{client}}"
+    sortable_fields: ["order", "title", "client"]
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "client", label: "Client", widget: "string", required: false }
+      - name: "categories"
+        label: "Categories"
+        widget: "select"
+        multiple: true
+        required: false
+        options:
+          - { label: "Design & Motion", value: "design-and-motion" }
+          - { label: "Branded Content", value: "branded-content" }
+          - { label: "Immersive Experiences", value: "immersive-experiences" }
+          - { label: "Healthcare", value: "healthcare" }
+          - { label: "Sports", value: "sports" }
+          - { label: "Film & Theater", value: "film-and-theater" }
+      - { name: "order", label: "Priority", widget: "number", required: false, default: 0, value_type: "int", hint: "Higher numbers appear first in work listings" }
+      - { name: "featured", label: "Featured on homepage", widget: "boolean", required: false, default: false }
+      - { name: "draft", label: "Draft (hidden)", widget: "boolean", required: false, default: false }
+      - { name: "thumbnail", label: "Thumbnail URL", widget: "string", required: false, hint: "Image URL used on cards and listings" }
+      - { name: "mainVideo", label: "Main video (Vimeo/YouTube URL)", widget: "string", required: false }
+      - name: "body"
+        label: "Project summary"
+        widget: "markdown"
+        required: false
+      - name: "styleFrames"
+        label: "Style frames / screenshots (image URLs)"
+        widget: "list"
+        required: false
+        field: { name: "url", label: "Image URL", widget: "string" }
+      - { name: "processDescription", label: "Process description", widget: "markdown", required: false }
+      - { name: "processVideo", label: "Process / case study video", widget: "string", required: false }
+      - name: "processImages"
+        label: "Process images (URLs)"
+        widget: "list"
+        required: false
+        field: { name: "url", label: "Image URL", widget: "string" }
+      - { name: "btsDescription", label: "Behind the scenes description", widget: "markdown", required: false }
+      - { name: "btsVideo", label: "BTS video", widget: "string", required: false }
+      - name: "btsPhotos"
+        label: "BTS photos (URLs)"
+        widget: "list"
+        required: false
+        field: { name: "url", label: "Image URL", widget: "string" }
+      - { name: "secondVideo", label: "Second video", widget: "string", required: false }
+      - { name: "thirdVideo", label: "Third video", widget: "string", required: false }
+      - { name: "fourthVideo", label: "Fourth video", widget: "string", required: false }
+      - { name: "credits", label: "Credits", widget: "markdown", required: false }
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "site"
+        label: "Site Content"
+        file: "src/content/settings/site.json"
+        fields:
+          - name: "brand"
+            label: "Brand"
+            widget: "object"
+            fields:
+              - { name: "name", label: "Name", widget: "string" }
+              - { name: "shortName", label: "Short name", widget: "string" }
+              - { name: "heroLineOne", label: "Hero line one", widget: "string" }
+              - { name: "heroLineTwo", label: "Hero line two", widget: "string" }
+              - { name: "tagline", label: "Tagline", widget: "text" }
+              - { name: "location", label: "Location", widget: "string" }
+              - { name: "email", label: "Email", widget: "string" }
+              - { name: "phone", label: "Phone", widget: "string" }
+              - { name: "copyright", label: "Copyright", widget: "string" }
+          - name: "social"
+            label: "Social"
+            widget: "object"
+            fields:
+              - { name: "linkedin", label: "LinkedIn", widget: "string" }
+              - { name: "instagram", label: "Instagram", widget: "string" }
+              - { name: "twitter", label: "Twitter", widget: "string" }
+          - name: "about"
+            label: "About"
+            widget: "object"
+            fields:
+              - { name: "lead", label: "Homepage lead", widget: "text" }
+              - { name: "intro", label: "About intro", widget: "text" }
+              - { name: "mission", label: "Mission", widget: "text" }
+              - { name: "vision", label: "Vision", widget: "text" }
+          - name: "stats"
+            label: "Stats"
+            widget: "list"
+            fields:
+              - { name: "value", label: "Value", widget: "string" }
+              - { name: "label", label: "Label", widget: "string" }
+          - name: "reputation"
+            label: "Reputation rows"
+            widget: "list"
+            fields:
+              - { name: "label", label: "Label", widget: "string" }
+              - { name: "value", label: "Value", widget: "string" }
+          - name: "whyPds"
+            label: "Why PDS"
+            widget: "list"
+            fields:
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "body", label: "Body", widget: "text" }
+          - name: "services"
+            label: "Services"
+            widget: "list"
+            fields:
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "slug", label: "Slug", widget: "string" }
+              - { name: "description", label: "Description", widget: "text" }
+              - name: "capabilities"
+                label: "Capabilities"
+                widget: "list"
+                field: { name: "item", label: "Capability", widget: "string" }

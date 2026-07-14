@@ -1,0 +1,83 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  client?: string;
+  thumbnail?: string;
+  index?: number;
+}
+const { href, title, client, thumbnail, index } = Astro.props;
+---
+
+<a class="card" href={href} data-animate="media">
+  <div class="card__media media-frame plus-corners" data-cursor-media>
+    {
+      thumbnail ? (
+        <img src={thumbnail} alt={title} loading="lazy" />
+      ) : (
+        <div class="card__placeholder" aria-hidden="true">PDS</div>
+      )
+    }
+    <span class="media-frame__shade" aria-hidden="true"></span>
+    <span class="btn-ghost" data-cursor-btn aria-hidden="true">View project →</span>
+    {index != null && <span class="card__index">{String(index).padStart(2, "0")}</span>}
+  </div>
+  <div class="card__meta">
+    {client && <span class="card__client">{client}</span>}
+    <h3 class="card__title">{title}</h3>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+  }
+  .card__media {
+    aspect-ratio: 4 / 3;
+  }
+  .card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    font-size: 2rem;
+    color: var(--muted);
+    background: var(--bg-cream);
+  }
+  .card__meta {
+    padding: 1rem 0.1rem 0;
+  }
+  .card__client {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .card__title {
+    font-family: var(--font-secondary);
+    font-weight: 500;
+    font-size: var(--fs-h3);
+    letter-spacing: var(--ls-xlarge);
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .card__index {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 2rem;
+    z-index: 3;
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+</style>

@@ -1,0 +1,150 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Accordion from "../components/Accordion.astro";
+import site from "../content/settings/site.json";
+
+const serviceItems = site.services.map((s) => ({
+  title: s.title,
+  body: s.description,
+  list: s.capabilities,
+  parenIndex: true,
+}));
+const whyItems = site.whyPds.map((w) => ({ title: w.title, body: w.body }));
+---
+
+<Layout title="About — Pretty Damn Sweet" dark={true}>
+  <header class="ahead section--dark grain">
+    <div class="banner-bg" aria-hidden="true">
+      <div class="banner-bg__blob ahead__blob1"></div>
+      <div class="banner-bg__blob banner-bg__blob--2 ahead__blob2"></div>
+      <div class="banner-bg__blob banner-bg__blob--3 ahead__blob3"></div>
+    </div>
+    <div class="container ahead__inner">
+      <div class="particles-row ahead__particles" aria-hidden="true">
+        <span>+</span><span>+</span>
+      </div>
+      <p class="eyebrow eyebrow--bar" data-animate="fade">About</p>
+      <h1 class="display ahead__title" data-split="chars">More than a production company</h1>
+      <div class="particles-row ahead__particles" aria-hidden="true">
+        <span>+</span><span>+</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container aintro">
+      <div class="aintro__label">
+        <p class="eyebrow eyebrow--paren" data-animate="fade">Studio</p>
+      </div>
+      <p class="aintro__text" data-split="chars">{site.about.intro}</p>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container split">
+      <div class="split__aside">
+        <p class="eyebrow eyebrow--bar" data-animate="fade">Why PDS</p>
+        <h2 class="h-section" data-split="chars">What makes working with us different</h2>
+      </div>
+      <div class="split__main">
+        <Accordion items={whyItems} idPrefix="awhy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div class="split__aside">
+        <p class="eyebrow eyebrow--bar" data-animate="fade">Services</p>
+        <h2 class="h-section" data-split="chars">What we do across every screen</h2>
+        <a class="btn split__cta" href="/contact" data-animate="fade">Start a project →</a>
+      </div>
+      <div class="split__main">
+        <Accordion items={serviceItems} idPrefix="asvc" />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ahead {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem);
+  }
+  /* Egnis about banner: soft white smoke drifting over near-black */
+  .ahead__blob1 {
+    width: 50vw;
+    height: 50vw;
+    bottom: -35%;
+    left: -12%;
+    background: radial-gradient(circle, rgba(235, 235, 240, 0.32), transparent 65%);
+  }
+  .ahead__blob2 {
+    width: 40vw;
+    height: 40vw;
+    top: -20%;
+    right: 10%;
+    background: radial-gradient(circle, rgba(150, 160, 180, 0.22), transparent 65%);
+  }
+  .ahead__blob3 {
+    width: 28vw;
+    height: 28vw;
+    bottom: -15%;
+    right: -8%;
+    background: radial-gradient(circle, rgba(220, 225, 235, 0.18), transparent 65%);
+  }
+  .ahead__inner {
+    position: relative;
+    z-index: 2;
+  }
+  .ahead__particles {
+    max-width: 34rem;
+    margin-block: 1.25rem;
+  }
+  .ahead__title {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-display-01);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 0.75;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .aintro {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.4fr) 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .aintro__text {
+    font-family: var(--font-primary);
+    font-size: var(--fs-h1);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: var(--ls-xlarge);
+    max-width: 46ch;
+    margin: 0;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.85fr) 1.15fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .split__aside .h-section {
+    margin: 1.5rem 0 2rem;
+    text-transform: none;
+    font-size: var(--fs-h2);
+    font-weight: 600;
+  }
+  .split__aside {
+    position: sticky;
+    top: 90px;
+  }
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; }
+    .split__aside { position: static; }
+    .aintro { grid-template-columns: 1fr; }
+  }
+</style>

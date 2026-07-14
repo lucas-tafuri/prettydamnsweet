@@ -1,0 +1,281 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import VideoEmbed from "../../components/VideoEmbed.astro";
+import { CATEGORY_LABELS } from "../../lib/categories";
+
+export async function getStaticPaths() {
+  const all = await getCollection("projects", ({ data }) => !data.draft);
+  return all.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const extraVideos = [d.secondVideo, d.thirdVideo, d.fourthVideo].filter(Boolean);
+const hasSummary = (entry.body ?? "").trim().length > 0;
+---
+
+<Layout title={`${d.title} — Pretty Damn Sweet`} dark={true}>
+  <article>
+    <!-- Header -->
+    <header class="whead section--dark">
+      <div class="container">
+        <a class="whead__back" href="/portfolio">← Back to work</a>
+        {d.client && <p class="eyebrow eyebrow--bar whead__client">{d.client}</p>}
+        <h1 class="display whead__title">{d.title}</h1>
+        {
+          d.categories.length > 0 && (
+            <div class="whead__tags">
+              {d.categories.map((slug) => (
+                <a class="chip" href={`/portfolio/${slug}`}>{CATEGORY_LABELS[slug] ?? slug}</a>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Main video -->
+    {
+      d.mainVideo && (
+        <section class="section--dark wvideo">
+          <div class="container">
+            <VideoEmbed url={d.mainVideo} title={d.title} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Summary + overview -->
+    {
+      (hasSummary || d.client) && (
+        <section class="section">
+          <div class="container woverview">
+            <div class="woverview__label">
+              <p class="eyebrow eyebrow--paren">Overview</p>
+            </div>
+            <div class="woverview__body rich">
+              {hasSummary ? <Content /> : <p>{d.title} by Pretty Damn Sweet{d.client ? ` for ${d.client}` : ""}.</p>}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Style frames -->
+    {
+      d.styleFrames.length > 0 && (
+        <section class="section wgallery">
+          <div class="container">
+            <p class="eyebrow eyebrow--bar wgallery__label">Style frames</p>
+          </div>
+          <div class="wgallery__grid container">
+            {d.styleFrames.map((src) => (
+              <figure class="wgallery__item" data-animate="media">
+                <img src={src} alt={`${d.title} still`} loading="lazy" />
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Process -->
+    {
+      (d.processDescription || d.processVideo || d.processImages.length > 0) && (
+        <section class="section section--dark">
+          <div class="container">
+            <p class="eyebrow eyebrow--bar">The process</p>
+            {d.processDescription && (
+              <div class="rich wprocess__text" set:html={d.processDescription} />
+            )}
+            {d.processVideo && (
+              <div class="wprocess__video">
+                <VideoEmbed url={d.processVideo} title={`${d.title} process`} />
+              </div>
+            )}
+            {d.processImages.length > 0 && (
+              <div class="wgallery__grid wgallery__grid--dark">
+                {d.processImages.map((src) => (
+                  <figure class="wgallery__item" data-animate="media">
+                    <img src={src} alt={`${d.title} process still`} loading="lazy" />
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Extra videos -->
+    {
+      extraVideos.length > 0 && (
+        <section class="section">
+          <div class="container">
+            <p class="eyebrow eyebrow--bar wmore__label">More from this project</p>
+            <div class="wmore__grid">
+              {extraVideos.map((v) => (
+                <VideoEmbed url={v} title={d.title} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- BTS -->
+    {
+      (d.btsDescription || d.btsVideo || d.btsPhotos.length > 0) && (
+        <section class="section section--dark">
+          <div class="container">
+            <p class="eyebrow eyebrow--bar">Behind the scenes</p>
+            {d.btsDescription && (
+              <div class="rich wprocess__text" set:html={d.btsDescription} />
+            )}
+            {d.btsVideo && (
+              <div class="wprocess__video">
+                <VideoEmbed url={d.btsVideo} title={`${d.title} BTS`} />
+              </div>
+            )}
+            {d.btsPhotos.length > 0 && (
+              <div class="wgallery__grid wgallery__grid--dark">
+                {d.btsPhotos.map((src) => (
+                  <figure class="wgallery__item" data-animate="media">
+                    <img src={src} alt={`${d.title} behind the scenes`} loading="lazy" />
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Credits -->
+    {
+      d.credits && (
+        <section class="section wcredits">
+          <div class="container woverview">
+            <div class="woverview__label">
+              <p class="eyebrow eyebrow--paren">Credits</p>
+            </div>
+            <div class="woverview__body rich" set:html={d.credits} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Next CTA -->
+    <section class="section section--dark wnext">
+      <div class="container">
+        <a class="btn" href="/portfolio">See more work →</a>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .whead {
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 4vw, 3rem);
+  }
+  .whead__back {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    color: rgba(247, 247, 245, 0.6);
+  }
+  .whead__back:hover { color: #fff; }
+  .whead__client {
+    margin-top: 2rem;
+  }
+  .whead__title {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-display-01);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 0.75;
+    text-transform: uppercase;
+    margin: 1rem 0 1.5rem;
+  }
+  .whead__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .wvideo {
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+  }
+  .woverview {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.4fr) 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .woverview__body {
+    font-family: var(--font-primary);
+    font-size: var(--fs-h1);
+    line-height: 1.2;
+    max-width: 40ch;
+    font-weight: 600;
+    letter-spacing: var(--ls-xlarge);
+  }
+  .wcredits .woverview__body {
+    font-size: var(--fs-body);
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: 60ch;
+    color: var(--muted-dark);
+  }
+  .wgallery__label,
+  .wmore__label {
+    margin-bottom: 2rem;
+  }
+  .wgallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    margin-top: 2rem;
+  }
+  .wgallery__item {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--chip);
+  }
+  .wgallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .wprocess__text {
+    max-width: 60ch;
+    margin: 1.5rem 0;
+    color: rgba(247, 247, 245, 0.82);
+    line-height: 1.7;
+  }
+  .wprocess__video {
+    margin: 2rem 0;
+  }
+  .wmore__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+  @media (max-width: 760px) {
+    .woverview {
+      grid-template-columns: 1fr;
+    }
+    .wgallery__grid,
+    .wmore__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

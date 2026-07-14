@@ -1,0 +1,153 @@
+---
+/**
+ * Shared portfolio listing UI — Egnis-style vertical work list.
+ */
+import FeaturedWork from "./FeaturedWork.astro";
+import { PORTFOLIO_FILTERS } from "../lib/categories";
+
+interface ProjectEntry {
+  id: string;
+  body?: string;
+  data: {
+    title: string;
+    client?: string;
+    thumbnail?: string;
+    categories?: string[];
+  };
+}
+
+interface Props {
+  title: string;
+  blurb: string;
+  activeSlug: string;
+  projects: ProjectEntry[];
+}
+
+const { title, blurb, activeSlug, projects } = Astro.props;
+---
+
+<header class="phead section--dark">
+  <div class="container">
+    <p class="eyebrow eyebrow--bar">Portfolio</p>
+    <h1 class="display phead__title">{title}</h1>
+    <p class="phead__blurb">{blurb}</p>
+  </div>
+</header>
+
+<section class="plist">
+  <div class="container">
+    <nav class="plist__filters" aria-label="Filter by category">
+      {
+        PORTFOLIO_FILTERS.map((f) => (
+          <a
+            class:list={["plist__filter", { "is-active": f.slug === activeSlug }]}
+            href={f.slug ? `/portfolio/${f.slug}` : "/portfolio"}
+            aria-current={f.slug === activeSlug ? "page" : undefined}
+          >
+            {f.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="plist__count">
+      <span class="eyebrow">{String(projects.length).padStart(2, "0")} projects</span>
+    </div>
+
+    {
+      projects.length === 0 ? (
+        <p class="plist__empty">No projects in this category yet.</p>
+      ) : (
+        <div class="plist__rows">
+          {projects.map((p) => (
+            <>
+              <hr class="divider" />
+              <FeaturedWork
+                href={`/work/${p.id}`}
+                title={p.data.title}
+                client={p.data.client}
+                thumbnail={p.data.thumbnail}
+                summary={p.body}
+                categories={p.data.categories}
+              />
+            </>
+          ))}
+          <hr class="divider" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .phead {
+    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .phead__title {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-display-01);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 0.75;
+    text-transform: uppercase;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .phead__blurb {
+    max-width: 44ch;
+    color: rgba(247, 247, 245, 0.78);
+    font-family: var(--font-primary);
+    font-size: var(--fs-body);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .plist {
+    background: var(--bg-cream);
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3.5rem, 8vw, 7rem);
+  }
+
+  /* Egnis-style filter pills */
+  .plist__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .plist__filter {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    padding: 0.7em 1.15em;
+    border: 1px solid var(--text-dark);
+    border-radius: 2px;
+    color: var(--text-dark);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.55;
+  }
+  .plist__filter:hover {
+    opacity: 1;
+  }
+  .plist__filter.is-active {
+    opacity: 1;
+    background: var(--text-dark);
+    color: var(--bg-light);
+  }
+
+  .plist__count {
+    margin-bottom: 0.5rem;
+  }
+  .plist__empty {
+    color: var(--muted);
+    font-family: var(--font-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-none);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    margin-top: 2rem;
+  }
+</style>

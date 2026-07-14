@@ -1,0 +1,233 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import FeaturedWork from "../components/FeaturedWork.astro";
+import Accordion from "../components/Accordion.astro";
+import site from "../content/settings/site.json";
+import { sortByPriority } from "../lib/projects";
+
+const all = await getCollection("projects", ({ data }) => !data.draft);
+
+const featured = sortByPriority(all.filter((p) => p.data.featured));
+
+const selected = (featured.length ? featured : sortByPriority(all)).slice(0, 4);
+
+const serviceItems = site.services.map((s) => ({
+  title: s.title,
+  body: s.description,
+  list: s.capabilities,
+  parenIndex: true,
+}));
+
+const whyItems = site.whyPds.map((w) => ({
+  title: w.title,
+  body: w.body,
+}));
+---
+
+<Layout dark={true} overlayNav={true}>
+  <Hero />
+
+  <!-- About / mission-vision -->
+  <section class="section" id="studio">
+    <div class="container">
+      <div class="intro">
+        <p class="eyebrow eyebrow--bar" data-animate="fade">The Studio</p>
+        <h2 class="h-section intro__lead" data-split="chars">{site.about.lead}</h2>
+      </div>
+
+      <div class="stats" data-animate="fade">
+        {
+          site.stats.map((s) => (
+            <div class="stats__item">
+              <span class="stats__value display">{s.value}</span>
+              <span class="stats__label">{s.label}</span>
+            </div>
+          ))
+        }
+        <a class="btn stats__cta" href="/about">About the studio →</a>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="mv">
+        <div class="mv__col" data-animate="fade">
+          <p class="eyebrow eyebrow--paren">Mission</p>
+          <p class="mv__text">{site.about.mission}</p>
+        </div>
+        <div class="mv__col" data-animate="fade">
+          <p class="eyebrow eyebrow--paren">Vision</p>
+          <p class="mv__text">{site.about.vision}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected works -->
+  <section class="section works" id="work">
+    <div class="container">
+      <div class="works__head">
+        <p class="eyebrow eyebrow--bar">Selected works</p>
+        <span class="works__range">2015 — 2024</span>
+      </div>
+      <hr class="divider" />
+      {
+        selected.map((p) => (
+          <>
+            <FeaturedWork
+              href={`/work/${p.id}`}
+              title={p.data.title}
+              client={p.data.client}
+              thumbnail={p.data.thumbnail}
+              summary={p.body}
+              categories={p.data.categories}
+            />
+            <hr class="divider" />
+          </>
+        ))
+      }
+      <div class="works__more">
+        <a class="btn" href="/portfolio">All work →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section section--dark" id="services">
+    <div class="container">
+      <div class="split">
+        <div class="split__aside">
+          <p class="eyebrow eyebrow--bar" data-animate="fade">Capabilities</p>
+          <h2 class="h-section" data-split="chars">Creative services that turn ideas into bold content for any screen</h2>
+          <a class="btn split__cta" href="/contact" data-animate="fade">Contact us →</a>
+        </div>
+        <div class="split__main">
+          <Accordion items={serviceItems} idPrefix="svc" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why PDS -->
+  <section class="section" id="why">
+    <div class="container">
+      <div class="split">
+        <div class="split__aside">
+          <p class="eyebrow eyebrow--bar" data-animate="fade">Why PDS</p>
+          <h2 class="h-section" data-split="chars">Reasons clients return to us for reliable, imaginative work</h2>
+        </div>
+        <div class="split__main">
+          <Accordion items={whyItems} idPrefix="why" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    max-width: 60rem;
+    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .intro__lead {
+    margin-top: 1.5rem;
+    text-transform: none;
+    font-family: var(--font-primary);
+    font-size: var(--fs-h1);
+    font-weight: 600;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.2;
+  }
+  .stats {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(2rem, 6vw, 5rem);
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .stats__value {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-display-02);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.2;
+  }
+  .stats__label {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stats__cta {
+    margin-left: auto;
+  }
+  .mv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-top: 2.5rem;
+  }
+  .mv__text {
+    margin-top: 1rem;
+    font-family: var(--font-primary);
+    font-size: var(--fs-body);
+    font-weight: 500;
+    letter-spacing: var(--ls-xlarge);
+    line-height: 1.4;
+    color: var(--muted-dark);
+    max-width: 44ch;
+  }
+
+  .works__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .works__range {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-tag);
+    font-weight: 500;
+    letter-spacing: var(--ls-none);
+    color: var(--muted);
+  }
+  .works__more {
+    margin-top: 2.5rem;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.85fr) 1.15fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .split__aside .h-section {
+    margin: 1.5rem 0 2rem;
+    text-transform: none;
+    font-size: var(--fs-h2);
+    font-weight: 600;
+  }
+  .split__aside {
+    position: sticky;
+    top: 90px;
+  }
+  @media (max-width: 860px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+    .split__aside {
+      position: static;
+    }
+    .mv {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
