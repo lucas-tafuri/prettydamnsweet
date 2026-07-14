@@ -8,7 +8,6 @@
     <!-- Absolute path so Decap finds config even when visiting /admin (no trailing slash) -->
     <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <style>
-      /* Loading shell shown before the CMS boots */
       #cms-loading {
         position: fixed;
         inset: 0;
@@ -33,6 +32,26 @@
         font-size: 12px;
       }
     </style>
+    <script>
+      // Apply a pending OAuth result BEFORE Decap boots.
+      // The /api/callback popup writes this when window.opener is null (GitHub COOP).
+      (function () {
+        var PENDING = "pds-cms-oauth";
+        var USER = "decap-cms-user";
+        try {
+          var raw = localStorage.getItem(PENDING);
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          localStorage.removeItem(PENDING);
+          if (data && data.token) {
+            localStorage.setItem(
+              USER,
+              JSON.stringify({ token: data.token, backendName: "github" })
+            );
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="cms-loading">
@@ -44,18 +63,41 @@
     </div>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
-      // Remove the loading shell once the CMS has rendered
-      const loadingEl = document.getElementById("cms-loading");
-      const watcher = setInterval(() => {
-        if (document.getElementById("nc-root")?.children.length) {
-          loadingEl.remove();
+      (function () {
+        var loadingEl = document.getElementById("cms-loading");
+        var watcher = setInterval(function () {
+          if (document.getElementById("nc-root")?.children.length) {
+            loadingEl?.remove();
+            clearInterval(watcher);
+          }
+        }, 150);
+        setTimeout(function () {
+          loadingEl?.remove();
           clearInterval(watcher);
-        }
-      }, 150);
-      setTimeout(() => {
-        loadingEl?.remove();
-        clearInterval(watcher);
-      }, 15000);
+        }, 15000);
+
+        // If the user is already on the login screen when the popup finishes,
+        // pick up the token and reload into a logged-in session.
+        var PENDING = "pds-cms-oauth";
+        var USER = "decap-cms-user";
+        setInterval(function () {
+          try {
+            var raw = localStorage.getItem(PENDING);
+            if (!raw) return;
+            var data = JSON.parse(raw);
+            localStorage.removeItem(PENDING);
+            if (data && data.token) {
+              localStorage.setItem(
+                USER,
+                JSON.stringify({ token: data.token, backendName: "github" })
+              );
+              window.location.reload();
+            } else if (data && data.error) {
+              alert("GitHub login failed: " + data.error);
+            }
+          } catch (e) {}
+        }, 400);
+      })();
     </script>
   </body>
 </html>
