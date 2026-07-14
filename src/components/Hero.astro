@@ -4,6 +4,11 @@ import site from "../content/settings/site.json";
 // Same looping muted Vimeo used as the background on prettydamnsweet.com
 const HERO_VIDEO =
   "https://player.vimeo.com/video/386290524?autoplay=1&muted=1&background=1&loop=1";
+
+// Three stacked words: Pretty + Damn left-aligned, Sweet right-aligned to Pretty
+const [pretty = "Pretty", damn = "Damn", sweet = "Sweet"] = site.brand.name
+  .trim()
+  .split(/\s+/);
 ---
 
 <section class="hero">
@@ -26,8 +31,9 @@ const HERO_VIDEO =
 
   <div class="hero__type container">
     <h1 class="display hero__title">
-      <span class="hero__line hero__line--1" data-hero-split>{site.brand.heroLineOne}</span>
-      <span class="hero__line hero__line--2" data-hero-split>{site.brand.heroLineTwo}</span>
+      <span class="hero__line hero__line--pretty" data-hero-split>{pretty}</span>
+      <span class="hero__line hero__line--damn" data-hero-split>{damn}</span>
+      <span class="hero__line hero__line--sweet" data-hero-split>{sweet}</span>
     </h1>
   </div>
 
@@ -89,10 +95,15 @@ const HERO_VIDEO =
     pointer-events: none;
   }
   .hero__meta,
-  .hero__type,
   .hero__foot {
     position: relative;
     z-index: 2;
+  }
+  .hero__type {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
   }
   .hero__meta {
     display: flex;
@@ -111,9 +122,12 @@ const HERO_VIDEO =
     text-align: right;
   }
   .hero__title {
-    margin: 0;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
+    width: max-content;
+    max-width: 100%;
     font-family: var(--font-secondary);
     font-weight: 500;
     font-size: var(--fs-display-xl);
@@ -127,8 +141,12 @@ const HERO_VIDEO =
     overflow: hidden;
     padding-bottom: 0.05em;
   }
-  .hero__line--2 {
-    align-self: flex-end;
+  /* Pretty + Damn share a left edge; Sweet shares Pretty's right edge */
+  .hero__line--pretty,
+  .hero__line--damn {
+    text-align: left;
+  }
+  .hero__line--sweet {
     text-align: right;
   }
   .hero__foot {
