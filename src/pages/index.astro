@@ -26,7 +26,13 @@ const whyItems = site.whyPds.map((w) => ({
 }));
 ---
 
-<Layout dark={true} overlayNav={true}>
+<Layout
+  title={`${site.brand.name} — Immersive Content Studio`}
+  description={site.about.lead || site.brand.tagline}
+  image="/og-default.png"
+  dark={true}
+  overlayNav={true}
+>
   <Hero />
 
   <!-- About / mission-vision -->

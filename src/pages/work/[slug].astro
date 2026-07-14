@@ -18,9 +18,23 @@ const d = entry.data;
 
 const extraVideos = [d.secondVideo, d.thirdVideo, d.fourthVideo].filter(Boolean);
 const hasSummary = (entry.body ?? "").trim().length > 0;
+
+const plainBody = (entry.body ?? "")
+  .replace(/[#>*_`\[\]()!-]/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+const ogDescription =
+  plainBody.slice(0, 180) ||
+  `${d.title}${d.client ? ` for ${d.client}` : ""} — immersive content by Pretty Damn Sweet.`;
 ---
 
-<Layout title={`${d.title} — Pretty Damn Sweet`} dark={true}>
+<Layout
+  title={`${d.title} — Pretty Damn Sweet`}
+  description={ogDescription}
+  image={d.thumbnail || "/og-default.png"}
+  ogType="article"
+  dark={true}
+>
   <article>
     <!-- Header -->
     <header class="whead section--dark">

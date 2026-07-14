@@ -7,6 +7,10 @@ import site from "../content/settings/site.json";
 interface Props {
   title?: string;
   description?: string;
+  /** Absolute or site-relative image URL for social share cards */
+  image?: string;
+  /** Open Graph type — "website" (default) or "article" for projects */
+  ogType?: "website" | "article";
   dark?: boolean;
   /** Float nav over the homepage hero video */
   overlayNav?: boolean;
@@ -15,9 +19,24 @@ interface Props {
 const {
   title = site.brand.name,
   description = site.brand.tagline,
+  image,
+  ogType = "website",
   dark = false,
   overlayNav = false,
 } = Astro.props;
+
+const siteOrigin = Astro.site?.origin ?? "https://prettydamnsweet.vercel.app";
+const canonicalURL = new URL(Astro.url.pathname, siteOrigin).href;
+
+function absoluteUrl(src: string | undefined): string {
+  const fallback = new URL("/og-default.png", siteOrigin).href;
+  if (!src) return fallback;
+  if (/^https?:\/\//i.test(src)) return src;
+  return new URL(src.startsWith("/") ? src : `/${src}`, siteOrigin).href;
+}
+
+const ogImage = absoluteUrl(image);
+const ogDescription = description.replace(/\s+/g, " ").trim().slice(0, 200);
 ---
 
 <!doctype html>
@@ -27,8 +46,35 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={ogDescription} />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.brand.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={title} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={title} />
+    {
+      site.social.twitter && (
+        <meta
+          name="twitter:site"
+          content={`@${site.social.twitter.replace(/.*twitter\.com\/|.*x\.com\//i, "").replace(/\/$/, "")}`}
+        />
+      )
+    }
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

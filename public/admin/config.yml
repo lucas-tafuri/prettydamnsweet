@@ -33,12 +33,8 @@ collections:
     identifier_field: "title"
     format: "frontmatter"
     summary: "{{title}}"
-    # Default the list to newest/highest-priority first
-    sortable_fields:
-      fields: ["order", "title", "client"]
-      default:
-        field: "order"
-        direction: "descending"
+    # Editors can sort the list by any of these (Priority first)
+    sortable_fields: ["order", "title", "client"]
     # Quick filters + grouping above the project list
     view_filters:
       - { label: "Featured on homepage", field: "featured", pattern: true }

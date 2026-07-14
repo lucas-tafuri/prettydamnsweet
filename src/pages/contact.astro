@@ -3,7 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import site from "../content/settings/site.json";
 ---
 
-<Layout title="Contact — Pretty Damn Sweet" dark={true}>
+<Layout
+  title="Contact — Pretty Damn Sweet"
+  description={`Get in touch with Pretty Damn Sweet — ${site.brand.location}. ${site.brand.email}`}
+  image="/og-default.png"
+  dark={true}
+>
   <section class="chero section--dark grain">
     <div class="banner-bg" aria-hidden="true">
       <div class="banner-bg__blob chero__blob1"></div>

@@ -12,7 +12,12 @@ const serviceItems = site.services.map((s) => ({
 const whyItems = site.whyPds.map((w) => ({ title: w.title, body: w.body }));
 ---
 
-<Layout title="About — Pretty Damn Sweet" dark={true}>
+<Layout
+  title="About — Pretty Damn Sweet"
+  description={site.about.intro.slice(0, 180) + "…"}
+  image="/og-default.png"
+  dark={true}
+>
   <header class="ahead section--dark grain">
     <div class="banner-bg" aria-hidden="true">
       <div class="banner-bg__blob ahead__blob1"></div>

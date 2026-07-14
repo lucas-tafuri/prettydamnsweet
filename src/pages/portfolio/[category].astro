@@ -30,7 +30,12 @@ const { slug, projects } = Astro.props;
 const meta = CATEGORY_BY_SLUG[slug];
 ---
 
-<Layout title={`${meta.title} — Pretty Damn Sweet`} description={meta.blurb} dark={true}>
+<Layout
+  title={`${meta.title} — Pretty Damn Sweet`}
+  description={meta.blurb}
+  image={projects[0]?.data.thumbnail || "/og-default.png"}
+  dark={true}
+>
   <PortfolioListing
     title={meta.title}
     blurb={meta.blurb}

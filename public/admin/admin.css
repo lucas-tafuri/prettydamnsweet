@@ -214,7 +214,11 @@ button[class*="Primary"]:hover {
 [class*="EditorToggle"],
 [class*="EditorContainer"],
 [class*="EditorContent"],
-[class*="PreviewPaneContainer"] {
+[class*="PreviewPaneContainer"],
+[class*="SplitPane"],
+[class*="StyledSplitPane"],
+[class*="ControlPane"],
+[class*="ControlTopbar"] {
   background: var(--pds-bg) !important;
 }
 [class*="EditorControlBar"],
@@ -223,6 +227,24 @@ button[class*="Primary"]:hover {
 }
 [class*="EditorContent"] > div {
   border-color: var(--pds-line) !important;
+}
+/* Split-pane divider between form and preview */
+[class*="Resizer"],
+[class*="SplitPane"] > span {
+  background: var(--pds-line) !important;
+}
+
+/* Rich-text / markdown editing surface (Slate) */
+[data-slate-editor],
+[data-slate-editor="true"],
+[class*="-Editor"],
+[class*="Editor "],
+[class*="EditorControl"] [contenteditable] {
+  background: var(--pds-bg-2) !important;
+  color: var(--pds-text) !important;
+}
+[data-slate-editor] a {
+  color: #fff !important;
 }
 
 /* Field label + hint */
@@ -343,11 +365,18 @@ button[class*="Primary"]:hover {
 /* Image / file widgets */
 [class*="ImageWidget"],
 [class*="FileWidget"],
-[class*="Empty"] {
+[class*="Empty"],
+[class*="ImageWrapper"],
+[class*="checkerboard"],
+[class*="StyledImage"],
+[class*="ImageControl"],
+[class*="FileControl"] {
   background: var(--pds-bg-2) !important;
-  border: 1px dashed var(--pds-line-strong) !important;
   color: var(--pds-muted) !important;
   border-radius: var(--pds-radius) !important;
+}
+[class*="Empty"] {
+  border: 1px dashed var(--pds-line-strong) !important;
 }
 
 /* Save / publish toolbar buttons */
@@ -392,4 +421,32 @@ button[class*="Primary"]:hover {
   background: var(--pds-panel-2) !important;
   color: var(--pds-text) !important;
   border: 1px solid var(--pds-line) !important;
+}
+
+/* -------------------------------------------------------------------------
+   Stray white-box killer
+   Decap's default theme is light, and some widget wrappers are bare emotion
+   hashes (no stable label) we can't target individually. Neutralize their
+   white background inside the editor panes so the dark surface shows through,
+   while preserving controls we explicitly styled above.
+   ------------------------------------------------------------------------- */
+[class*="SplitPane"] div[class^="css-"]:not([class*="Toolbar"]):not([class*="Menu"]):not([class*="menu"]):not([class*="control"]):not([class*="Toggle"]):not([class*="TopBar"]):not([class*="Topbar"]):not([class*="multiValue"]):not([class*="Card"]):not([class*="Frame"]) {
+  background-color: transparent !important;
+}
+
+/* Re-assert dark surfaces for the editing controls that need contrast */
+[data-slate-editor],
+[data-slate-editor="true"],
+#nc-root textarea,
+[class*="ImageWrapper"],
+[class*="checkerboard"] {
+  background-color: var(--pds-bg-2) !important;
+}
+[class*="Toolbar"] {
+  background-color: var(--pds-panel-2) !important;
+}
+
+/* Field wrapper: subtle card so fields stay visually grouped */
+[class*="FieldLabel"] {
+  padding-top: 2px;
 }
