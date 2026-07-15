@@ -29,7 +29,7 @@ const siteOrigin = Astro.site?.origin ?? "https://prettydamnsweet.vercel.app";
 const canonicalURL = new URL(Astro.url.pathname, siteOrigin).href;
 
 function absoluteUrl(src: string | undefined): string {
-  const fallback = new URL("/og-default.png", siteOrigin).href;
+  const fallback = new URL("/og-share.png", siteOrigin).href;
   if (!src) return fallback;
   if (/^https?:\/\//i.test(src)) return src;
   return new URL(src.startsWith("/") ? src : `/${src}`, siteOrigin).href;
