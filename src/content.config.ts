@@ -20,7 +20,7 @@ const projects = defineCollection({
     btsPhotos: z.array(z.string()).optional().default([]),
     credits: z.string().optional().default(''),
     categories: z.array(z.string()).optional().default([]),
-    order: z.number().optional().default(0),
+    order: z.coerce.number().optional().default(0),
     featured: z.boolean().optional().default(false),
     draft: z.boolean().optional().default(false),
   }),
