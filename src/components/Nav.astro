@@ -146,16 +146,19 @@ const current = Astro.url.pathname;
     border-radius: 2px;
     padding: 0.65em 1.15em;
     line-height: 1.4;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
-  .nav__cta:hover {
-    background: currentColor;
-  }
+  /* Don't use background: currentColor — it tracks the new text color and
+     both fill + type go dark (invisible on the homepage). */
   .nav--dark .nav__cta:hover {
+    background: var(--text-light);
     color: var(--text-dark);
+    border-color: var(--text-light);
   }
   .nav:not(.nav--dark) .nav__cta:hover {
+    background: var(--text-dark);
     color: #fff;
+    border-color: var(--text-dark);
   }
   .nav__burger {
     display: none;
