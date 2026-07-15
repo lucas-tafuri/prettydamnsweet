@@ -28,7 +28,7 @@ categories:
   - "design-and-motion"
   - "sports"
 order: 17
-featured: true
+featured: false
 draft: false
 ---
 

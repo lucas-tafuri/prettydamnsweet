@@ -1,5 +1,5 @@
 ---
-title: "Upfront 2022"
+title: "Best of Upfronts"
 client: "Warner Bros. Discovery"
 thumbnail: "https://cdn.prod.website-files.com/5e60746d2f81092d7b0d9474/63b8959c9c7c5483b10d9384_WBDUpfront.jpg"
 mainVideo: "https://player.vimeo.com/video/787028124"
@@ -27,8 +27,8 @@ btsPhotos: []
 credits: ""
 categories:
   - "immersive-experiences"
-order: 22
-featured: false
+order: 29
+featured: true
 draft: false
 ---
 

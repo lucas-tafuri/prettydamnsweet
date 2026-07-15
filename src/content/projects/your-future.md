@@ -26,7 +26,7 @@ credits: "<p><strong>Client: </strong>Wells Fargo <strong><br>Agency: </strong>W
 categories:
   - "design-and-motion"
 order: 16
-featured: true
+featured: false
 draft: false
 ---
 

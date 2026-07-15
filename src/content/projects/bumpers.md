@@ -25,7 +25,7 @@ credits: "<p><strong>Client: </strong>TBS / Warner<br><strong>Creative Director:
 categories:
   - "design-and-motion"
 order: 17
-featured: true
+featured: false
 draft: false
 ---
 

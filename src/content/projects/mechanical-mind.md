@@ -21,7 +21,7 @@ credits: "<p><strong><em>Project:</em></strong><em> Adobe Max Opener 2019<br></e
 categories:
   - "design-and-motion"
 order: 16
-featured: true
+featured: false
 draft: false
 ---
 
