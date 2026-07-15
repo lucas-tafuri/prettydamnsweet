@@ -35,6 +35,35 @@ const whyItems = site.whyPds.map((w) => ({
 >
   <Hero />
 
+  <!-- Selected works -->
+  <section class="section works" id="work">
+    <div class="container">
+      <div class="works__head">
+        <p class="eyebrow eyebrow--bar">Selected works</p>
+        <span class="works__range">2015 — 2024</span>
+      </div>
+      <hr class="divider" />
+      {
+        selected.map((p) => (
+          <>
+            <FeaturedWork
+              href={`/work/${p.id}`}
+              title={p.data.title}
+              client={p.data.client}
+              thumbnail={p.data.thumbnail}
+              summary={p.body}
+              categories={p.data.categories}
+            />
+            <hr class="divider" />
+          </>
+        ))
+      }
+      <div class="works__more">
+        <a class="btn" href="/portfolio">All work →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- About / mission-vision -->
   <section class="section" id="studio">
     <div class="container">
@@ -66,35 +95,6 @@ const whyItems = site.whyPds.map((w) => ({
           <p class="eyebrow eyebrow--paren">Vision</p>
           <p class="mv__text">{site.about.vision}</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Selected works -->
-  <section class="section works" id="work">
-    <div class="container">
-      <div class="works__head">
-        <p class="eyebrow eyebrow--bar">Selected works</p>
-        <span class="works__range">2015 — 2024</span>
-      </div>
-      <hr class="divider" />
-      {
-        selected.map((p) => (
-          <>
-            <FeaturedWork
-              href={`/work/${p.id}`}
-              title={p.data.title}
-              client={p.data.client}
-              thumbnail={p.data.thumbnail}
-              summary={p.body}
-              categories={p.data.categories}
-            />
-            <hr class="divider" />
-          </>
-        ))
-      }
-      <div class="works__more">
-        <a class="btn" href="/portfolio">All work →</a>
       </div>
     </div>
   </section>

@@ -30,7 +30,7 @@ const current = Astro.url.pathname;
 
     <nav class="nav__links" aria-label="Primary">
       {
-        links.map((l, i) => (
+        links.map((l) => (
           <a
             class:list={[
               "nav__link",
@@ -44,7 +44,6 @@ const current = Astro.url.pathname;
             href={l.href}
           >
             {l.label}
-            <sup>º{i + 1}</sup>
           </a>
         ))
       }
@@ -59,10 +58,9 @@ const current = Astro.url.pathname;
 
   <div class="nav__mobile" data-mobile hidden>
     {
-      links.map((l, i) => (
+      links.map((l) => (
         <a class="nav__mobile-link" href={l.href}>
           <span>{l.label}</span>
-          <sup>º{i + 1}</sup>
         </a>
       ))
     }
@@ -126,11 +124,6 @@ const current = Astro.url.pathname;
     text-transform: uppercase;
     opacity: 0.7;
     transition: opacity 0.2s ease;
-  }
-  .nav__link sup {
-    font-size: 0.65em;
-    opacity: 0.6;
-    margin-left: 1px;
   }
   .nav__link:hover,
   .nav__link.is-active {

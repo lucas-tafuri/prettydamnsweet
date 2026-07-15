@@ -394,6 +394,12 @@ p {
   background-repeat: no-repeat;
   background-position: top left, top right, bottom left, bottom right;
   background-size: 12px 12px;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+.plus-corners:hover::before,
+.plus-corners.is-hover::before {
+  opacity: 0;
 }
 
 /* "+" particle rows flanking dark banner content (Egnis section-particles-block) */
